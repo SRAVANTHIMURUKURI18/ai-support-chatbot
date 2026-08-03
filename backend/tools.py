@@ -5,14 +5,20 @@ from models import Ticket
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Fast local embedding initialization
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+embeddings = HuggingFaceEmbeddings(
+    model_name="all-MiniLM-L6-v2",
+    model_kwargs={"local_files_only": True}
+)
 
 docs = [
-    "The central library is open from 8:00 AM to 8:00 PM on all working days and 9:00 AM to 1:00 PM on Saturdays.",
-    "Hostel WiFi issues can be resolved by registering a ticket with your laptop MAC address at the campus network center or online helpdesk.",
-    "The college academic fee counter is open from 9:30 AM to 4:00 PM in the main administrative block on all working days.",
-    "EAMCET counseling and admissions office is located on the ground floor of the administrative block, operating from 10:00 AM to 5:00 PM."
+    "Campus Facilities: Digital library, normal library, park, tea leaf, cyber zone, playground, gym, squash court, tennis court, cricket ground, snacks zone, and gods of temple for divine vibes.",
+    "Food Outlets: Canoe and cuisine for biryanis, tea leaf for tea, juice corner for juices, temple square and central square for snacks, fresh choice bakery for birthday cakes, and milk parlour for milk related products.",
+    "Faculty Contacts for Permissions & Placements: For placement related queries contact TPO. For permission related queries contact HOD or assigned mentor.",
+    "Placement Statistics (Batch-wise): 2021: 750+ placements, 2022: 850+ placements, 2023: 920+ placements, 2024: 980+ placements, 2025: 1050+ placements, 2026: 1000+ placements so far.",
+    "College Websites & Portals: vishnu.ac.in is for attendance, student profile, and fee-related details. vishnu.ac.results is for checking semester results. vishnulearning.com is for all semester subjects related stuff like PDFs, quizzes, and assignments. vedic.dev is for complete detailed student profile required for placements, mock interviews, tech guidance, and administrator communications.",
+    "Smart Campus App (Hostel Students): Used for hostel attendance, food orders, and applying for local or general outings.",
+    "Available Student Clubs: E-Cell, GDG (Google Developer Groups), Student Success Center, Dance Club, Music Club, Drone Club, and Robotics Club.",
+    "Hostel Outing Procedure: 1. Open Smart Campus App, select outing (general or local), and fill in date, reason, in-time, out-time, and companion details. 2. Automated WhatsApp message/call goes to parent for approval/decline. 3. Department HOD approves/declines based on rules. 4. Head Warden gives final approval. 5. Scan QR code at security gate to check out (triggers parent notification with date/time). Same scan procedure applies when re-entering campus."
 ]
 
 if os.path.exists("faiss_index"):
@@ -21,22 +27,22 @@ else:
     vectorstore = FAISS.from_texts(docs, embeddings)
     vectorstore.save_local("faiss_index")
 
-retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
+retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
 
 @tool
 def search_knowledge_base(query: str) -> str:
-    """Call this tool to look up general campus guidelines or library timings."""
+    """Call this tool to look up campus guidelines, facilities, food, websites, or club info."""
     try:
         results = retriever.invoke(query)
         if not results:
             return "Please check the menu options for quick assistance."
-        return results[0].page_content
+        return "\n\n".join([doc.page_content for doc in results])
     except Exception:
-        return "The central library is open from 8:00 AM to 8:00 PM on all working days."
+        return "Please type **'menu'** to view available options."
 
 @tool
 def reset_password(student_id: str) -> str:
-    """Call this tool when a user resets their portal password."""
+    """Call this tool when a user explicitly requests to reset their portal password."""
     return f"Password reset created for {student_id}."
 
 @tool
@@ -58,10 +64,8 @@ def show_tickets(student_id: str) -> str:
     clean_id = student_id.lower().strip()
     tickets = db.query(Ticket).filter(Ticket.student_id == clean_id).all()
     db.close()
-    
     if not tickets:
         return f"You currently have no open support tickets registered under {clean_id}."
-    
     response = f"Here are your registered support tickets:\n"
     for t in tickets:
         response += f"• Ticket #{t.id} [{t.category}]: {t.description} (Status: {t.status})\n"
