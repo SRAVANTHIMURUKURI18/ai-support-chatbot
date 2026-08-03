@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT Helpdesk - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-body">
+    <div class="auth-card">
+        <h2>VIT<span>helpdesk</span></h2>
+        <p class="subtitle">Student Portal Sign In</p>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label>College Email ID</label>
+                <input type="email" id="loginEmail" placeholder="student@vishnu.edu.in" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="VITB@123" required>
+            </div>
+            <button type="submit" class="auth-btn">Sign In</button>
+        </form>
+        
+        <p class="auth-switch">Don't have an account? <a href="signup.html">Register here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Login failed');
+
+                localStorage.setItem('vit_logged_in', 'true');
+                localStorage.setItem('vit_email', data.email.toLowerCase());
+                
+                window.location.href = 'chat.html';
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+    </script>
+</body>
+</html>

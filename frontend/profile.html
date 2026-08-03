@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIT Helpdesk - Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-content">
+                <h2>VIT<span>helpdesk</span></h2>
+                <a href="chat.html" class="nav-link">Back to Chat</a>
+            </div>
+        </header>
+
+        <main class="profile-main">
+            <div class="profile-card">
+                <div class="avatar-large" id="avatarInitials">SM</div>
+                <h3 id="profileName">Loading...</h3>
+                <p class="text-muted" id="profileBranch">Loading...</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-box">
+                        <span class="stat-number" id="activeTickets">0</span>
+                        <span class="stat-label">Active Tickets</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="resolvedTickets">0</span>
+                        <span class="stat-label">Resolved</span>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <p><strong>Roll Number:</strong> <span id="profileRoll">-</span></p>
+                    <p><strong>College Email:</strong> <span id="profileEmail">-</span></p>
+                </div>
+
+                <hr style="border:0; border-top:1px solid var(--border-light); margin: 1.5rem 0;">
+
+                <h4 style="margin-bottom: 10px; font-size: 0.95rem;">Reset Portal Password</h4>
+                <form id="resetForm" style="text-align: left; margin-bottom: 1rem;">
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <input type="password" id="oldPassword" placeholder="Current Password" required style="font-size: 0.85rem; padding: 8px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <input type="password" id="newPassword" placeholder="New Password" required style="font-size: 0.85rem; padding: 8px;">
+                    </div>
+                    <button type="submit" class="auth-btn" style="margin-top: 5px; padding: 8px; font-size: 0.9rem;">Update Password</button>
+                </form>
+
+                <button class="auth-btn logout-btn" onclick="localStorage.clear(); window.location.href='index.html';">Sign Out</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function loadProfile() {
+            const email = localStorage.getItem('vit_email');
+            if (!email) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://127.0.0.1:8000/api/profile/${email}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error('Failed to load profile');
+
+                document.getElementById('profileName').innerText = data.name;
+                document.getElementById('profileBranch').innerText = data.branch_year;
+                document.getElementById('profileRoll').innerText = data.roll_number;
+                document.getElementById('profileEmail').innerText = data.email;
+                
+                // Matches exact SQLite count dynamically
+                document.getElementById('activeTickets').innerText = data.active_tickets;
+                document.getElementById('resolvedTickets').innerText = data.resolved_tickets;
+                
+                const initials = data.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                document.getElementById('avatarInitials').innerText = initials;
+            } catch (err) {
+                console.error('Error loading profile data:', err);
+            }
+        }
+
+        document.getElementById('resetForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = localStorage.getItem('vit_email');
+            const old_password = document.getElementById('oldPassword').value;
+            const new_password = document.getElementById('newPassword').value;
+
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, old_password, new_password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Password update failed');
+
+                alert('Password updated successfully!');
+                document.getElementById('resetForm').reset();
+            } catch (err) {
+                alert(err.message);
+            }
+        });
+
+        loadProfile();
+    </script>
+</body>
+</html>

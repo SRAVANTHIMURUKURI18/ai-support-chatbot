@@ -1,0 +1,20 @@
+[
+  {
+    "scenario_type": "Clear requests",
+    "user_query": "Create a support ticket for the broken projector in classroom 4A.",
+    "expected_action": "Call create_ticket Tool",
+    "intent_detected": true
+  },
+  {
+    "scenario_type": "Knowledge-based question (RAG)",
+    "user_query": "What is the seating capacity of the Mini Auditorium?",
+    "expected_action": "Call retrieve_college_faqs Tool and answer 300",
+    "intent_detected": true
+  },
+  {
+    "scenario_type": "Multi-step requests",
+    "user_query": "Reset the password for student SMurukuri and tell me the library hours.",
+    "expected_action": "Call reset_password Tool THEN Call retrieve_college_faqs Tool",
+    "intent_detected": true
+  }
+]

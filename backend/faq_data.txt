@@ -1,0 +1,31 @@
+Vishnu Institute of Technology - Comprehensive Helpdesk Knowledge Base
+
+[SECTION: COLLEGE TIMINGS]
+1. Main Campus Hours: The college operates from 9:00 AM to 4:40 PM, Monday through Saturday.
+2. Library Hours: The central library is open from 8:00 AM to 8:00 PM on all working days. On Sundays and holidays, it is open from 10:00 AM to 4:00 PM.
+3. Canteen Timings: The main canteen serves breakfast from 8:00 AM to 10:00 AM, lunch from 12:00 PM to 2:00 PM, and snacks until 6:00 PM.
+4. Hostel Gate Timings: The girls' hostel main gate closes at 6:30 PM. The boys' hostel main gate closes at 8:30 PM. All students must be inside after these times unless they have explicit permission.
+
+[SECTION: ACADEMIC POLICIES]
+5. Attendance Policy: A minimum of 75% attendance in each subject is mandatory to appear for the semester-end examinations. Condonation for medical reasons (up to 10%) requires a valid medical certificate submitted within 3 days of returning.
+6. Examination Rules: Mobile phones, smartwatches, and programmable calculators are strictly prohibited inside the examination hall. Mid-semester exams are typically held in weeks 8 and 16 of the semester.
+7. Placement Eligibility: To be eligible for campus placements, a student must have a minimum CGPA of 6.5 with no active backlogs. Training sessions conducted by the Placement Cell are mandatory.
+
+[SECTION: FEE STRUCTURE & PAYMENTS]
+8. Tuition Fee (Convener Quota): The tuition fee for students admitted under the convener quota is typically 70,000 INR per annum (subject to regulatory changes). This can be paid in two installments (semester-wise).
+9. Tuition Fee (Management Quota): Fees for management quota seats vary by branch and are defined by the management committee annually.
+10. Other Fees: Exam fee is approximately 1,500 INR per semester. Bus fee ranges from 15,000 to 30,000 INR per annum depending on the distance. Hostel fee (including food and accommodation) is roughly 95,000 INR per annum.
+11. Fee Payment Deadline: The deadline for tuition fee payment is within two weeks of the semester commencement. A late fee of 100 INR per day is charged after the deadline.
+
+[SECTION: ADMISSIONS & EAMCET CUTOFFS (Example Data)]
+12. Admission Mode: Primarily through AP EAMCET convener quota (70% seats) and Management quota (30% seats). ECET for lateral entry.
+13. AP EAMCET Cutoffs (Representative Examples - OC Category General, Round 1):
+    - Computer Science & Engineering (CSE): 5000- 15,200
+    - CSE (AI & ML): 12,000 - 14,500
+    - Electronics & Communication Engineering (ECE): 14,000 - 29,000
+    - Information Technology (IT): 13,500 - 16,500
+    - Mechanical Engineering (ME): 55,000 - 75,000
+    *Note: Cutoffs vary annually based on exam difficulty, applicant numbers, and student preferences. These ranges are estimates.*
+
+[SECTION: SENSITIVE INFORMATION HANDLING]
+14. Login Security Reminder: The IT Helpdesk and this chatbot will *never* ask you for your LMS or ERP password. We only require your Roll Number or Username. If you need to share credentials, you must only do so on the official Vishnu Institute password reset portal, which is a HTTPS secured site. The chatbot can generate the official secured URL for you.
