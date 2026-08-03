@@ -8,7 +8,7 @@
 </head>
 <body class="auth-body">
     <div class="auth-card">
-        <h2>VIT<span>helpdesk</span></h2>
+        <h2 class="brand-logo">VIT<span>helpdesk</span></h2>
         <p class="subtitle">Student Portal Sign In</p>
         
         <form id="loginForm">
@@ -43,6 +43,7 @@
 
                 localStorage.setItem('vit_logged_in', 'true');
                 localStorage.setItem('vit_email', data.email.toLowerCase());
+                localStorage.setItem('student_email', data.email.toLowerCase());
                 
                 window.location.href = 'chat.html';
             } catch (err) {

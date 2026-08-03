@@ -3,147 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIT Helpdesk Chatbot</title>
+    <title>VIT Helpdesk - Smart Assistant</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        if (localStorage.getItem('vit_logged_in') !== 'true') {
-            window.location.href = 'index.html';
+    <style>
+        /* Force strict full-screen viewport layout */
+        html, body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-    </script>
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .chat-header {
+            flex-shrink: 0;
+            height: 65px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 100;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 65px);
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            overflow: hidden;
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px 40px;
+            overflow-y: auto !important;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: var(--bg-color);
+        }
+
+        .quick-replies {
+            flex-shrink: 0;
+            padding: 10px 40px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-light);
+            z-index: 50;
+        }
+
+        .chat-input-area {
+            flex-shrink: 0;
+            padding: 15px 40px;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            background: var(--input-bg);
+            color: var(--text-color);
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input-area button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
-        <header>
-            <div class="header-content">
-                <h2>VIT<span>helpdesk</span></h2>
-                <div class="header-actions">
-                    <a href="profile.html" class="icon-btn" title="View Profile">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </a>
+        <header class="chat-header">
+            <h2 class="brand-logo" id="logoClick" style="cursor:pointer; margin:0;">VIT<span>helpdesk</span></h2>
+            <div class="header-controls">
+                <button type="button" id="darkToggleBtn" class="dark-toggle-btn">🌙 Dark Mode</button>
+                <div class="profile-icon-btn" id="profileBtn" title="Student Profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
                 </div>
             </div>
         </header>
 
-        <main id="chatWindow">
-            <!-- Instantly rendered initial menu - zero network delay -->
-            <div class="message ai-message">
-                <div class="avatar">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
-                </div>
-                <div class="bubble" style="white-space: pre-wrap;">Welcome to Vishnu Institute of Technology IT Helpdesk! Please select an option below:
+        <main class="chat-container">
+            <div class="chat-box" id="chatMessages">
+                <div class="message bot">Welcome to Vishnu Institute of Technology IT Helpdesk! Please select an option below:
 
 1️⃣ **Create a Support Ticket**
 2️⃣ **Retrieve College Info**
 3️⃣ **Display Active Tickets**
-4️⃣ **Reset Portal Password**</div>
+4️⃣ **Reset Portal Password**
+5️⃣ **Explore Campus Clubs & Join**</div>
             </div>
-        </main>
 
-        <div class="input-area">
-            <div class="suggestion-chips">
-                <button class="chip" onclick="sendSuggested('College Info')">College Info</button>
-                <button class="chip" onclick="sendSuggested('EAMCET details')">EAMCET Info</button>
-                <button class="chip" onclick="sendSuggested('Create a ticket')">Create Ticket</button>
-                <button class="chip" onclick="sendSuggested('Show My Tickets')">My Tickets</button>
+            <div class="quick-replies">
+                <button type="button" class="quick-btn" data-text="College Info">College Info</button>
+                <button type="button" class="quick-btn" data-text="EAPCET Info">EAPCET Info</button>
+                <button type="button" class="quick-btn" data-text="Create Ticket">Create Ticket</button>
+                <button type="button" class="quick-btn" data-text="My Tickets">My Tickets</button>
+                <button type="button" class="quick-btn" data-text="menu">Menu</button>
             </div>
-            <div class="input-wrapper">
-                <textarea id="userInput" rows="1" placeholder="Type a message or click an option..."></textarea>
-                <button id="sendBtn" class="send-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type a message or select an option..." autocomplete="off">
+                <button type="button" id="sendBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        const chatWindow = document.getElementById('chatWindow');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const userEmail = localStorage.getItem('vit_email') || 'student@vishnu.edu.in';
+        const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email') || "23pa1a05g1@vishnu.edu.in";
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
 
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-            sendBtn.disabled = this.value.trim() === '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedChat = localStorage.getItem('chat_history_' + studentEmail);
+            if (savedChat) {
+                chatMessages.innerHTML = savedChat;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            if (localStorage.getItem('dark_mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                const btn = document.getElementById('darkToggleBtn');
+                if (btn) btn.innerText = "☀️ Light Mode";
+            }
+
+            document.getElementById('logoClick').addEventListener('click', () => {
+                window.location.href = 'chat.html';
+            });
+
+            document.getElementById('profileBtn').addEventListener('click', () => {
+                window.location.href = 'profile.html';
+            });
+
+            document.getElementById('darkToggleBtn').addEventListener('click', toggleDarkMode);
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const text = btn.getAttribute('data-text');
+                    chatInput.value = text;
+                    sendMessage();
+                });
+            });
         });
-        sendBtn.disabled = true;
-
-        function sendSuggested(text) {
-            userInput.value = text;
-            userInput.style.height = 'auto';
-            sendBtn.disabled = false;
-            sendMessage();
-        }
 
         async function sendMessage() {
-            const text = userInput.value.trim();
+            const text = chatInput.value.trim();
             if (!text) return;
 
-            appendMessage('user', text);
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            sendBtn.disabled = true;
+            appendMessage(text, 'user');
+            chatInput.value = '';
 
-            const loadingId = appendLoading();
+            const processingId = appendMessage('Processing...', 'bot');
 
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        message: `[User Email: ${userEmail}] ${text}`, 
-                        session_id: userEmail 
+                    body: JSON.stringify({
+                        message: text,
+                        session_id: studentEmail
                     })
                 });
-
-                if (!response.ok) throw new Error('Backend offline');
-
                 const data = await response.json();
-                document.getElementById(loadingId).remove();
-                appendMessage('ai', data.reply);
-
-            } catch (error) {
-                document.getElementById(loadingId).remove();
-                appendMessage('ai', 'Error: Could not connect to backend server. Make sure python main.py is running.');
+                const procElement = document.getElementById(processingId);
+                if (procElement) procElement.remove();
+                
+                appendMessage(data.response || data.message || "Action completed.", 'bot');
+                localStorage.setItem('chat_history_' + studentEmail, chatMessages.innerHTML);
+            } catch (err) {
+                const procElement = document.getElementById(processingId);
+                if (procElement) procElement.remove();
+                appendMessage('Error connecting to server. Please try again.', 'bot');
             }
         }
 
-        function appendMessage(sender, text) {
-            const isUser = sender === 'user';
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-            
-            const aiAvatar = `<div class="avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg></div>`;
-            
-            messageDiv.innerHTML = `${isUser ? '' : aiAvatar}<div class="bubble" style="white-space: pre-wrap;">${escapeHTML(text)}</div>`;
-            chatWindow.appendChild(messageDiv);
-            chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
+        function appendMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.id = 'msg-' + Math.random().toString(36).substring(2, 9);
+            div.innerText = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            localStorage.setItem('chat_history_' + studentEmail, chatMessages.innerHTML);
+            return div.id;
         }
 
-        function appendLoading() {
-            const id = 'loading-' + Date.now();
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ai-message`;
-            messageDiv.id = id;
-            messageDiv.innerHTML = `<div class="avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg></div><div class="bubble">Processing...</div>`;
-            chatWindow.appendChild(messageDiv);
-            chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
-            return id;
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, tag => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-            }[tag]));
-        }
-
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                if (!sendBtn.disabled) sendMessage();
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('darkToggleBtn');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.innerText = "☀️ Light Mode";
+                localStorage.setItem('dark_mode', 'true');
+            } else {
+                btn.innerText = "🌙 Dark Mode";
+                localStorage.setItem('dark_mode', 'false');
             }
-        });
-        sendBtn.addEventListener('click', sendMessage);
+        }
     </script>
 </body>
 </html>

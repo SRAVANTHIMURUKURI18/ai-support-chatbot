@@ -3,62 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIT Helpdesk - Register</title>
+    <title>VIT Helpdesk - Sign Up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="auth-body">
     <div class="auth-card">
-        <h2>VIT<span>helpdesk</span></h2>
+        <h2 class="brand-logo">VIT<span>helpdesk</span></h2>
         <p class="subtitle">Create Student Account</p>
         
         <form id="signupForm">
             <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="Sravanthi Murukuri" required>
-            </div>
-            <div class="form-group">
-                <label>College Email ID (@vishnu.edu.in)</label>
-                <input type="email" id="email" placeholder="23pa1a05g1@vishnu.edu.in" required>
-            </div>
-            <div class="form-group">
-                <label>Roll Number</label>
-                <input type="text" id="rollNumber" placeholder="23PA1A05G1" required>
-            </div>
-            <div class="form-group">
-                <label>Branch & Year</label>
-                <input type="text" id="branchYear" placeholder="CSE - 4TH YEAR" required>
+                <label>College Email ID</label>
+                <input type="email" id="signupEmail" placeholder="student@vishnu.edu.in" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="password" placeholder="VITB@123" required>
+                <input type="password" id="signupPassword" placeholder="Create Password" required>
             </div>
             <button type="submit" class="auth-btn">Register</button>
         </form>
         
-        <p class="auth-switch">Already registered? <a href="index.html">Sign In</a></p>
+        <p class="auth-switch">Already have an account? <a href="index.html">Sign In</a></p>
     </div>
 
     <script>
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const payload = {
-                name: document.getElementById('name').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                roll_number: document.getElementById('rollNumber').value.trim(),
-                branch_year: document.getElementById('branchYear').value.trim(),
-                password: document.getElementById('password').value
-            };
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
 
             try {
                 const res = await fetch('http://127.0.0.1:8000/api/signup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ email, password })
                 });
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.detail || 'Registration failed');
+                if (!res.ok) throw new Error(data.detail || 'Signup failed');
 
-                alert('Account created successfully! Please log in.');
+                alert('Registration successful! Please sign in.');
                 window.location.href = 'index.html';
             } catch (err) {
                 alert(err.message);
