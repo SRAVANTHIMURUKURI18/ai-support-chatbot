@@ -1,383 +1,173 @@
-:root {
-    --bg-color: #fcf9f2;
-    --card-bg: #ffffff;
-    --text-color: #2c2c2c;
-    --primary: #c93b2b;
-    --primary-gradient: linear-gradient(135deg, #c93b2b 0%, #a82e21 100%);
-    --bot-bg: #f5f1eb;
-    --user-bg: #c93b2b;
-    --user-text: #ffffff;
-    --border-light: #e5ded3;
-    --input-bg: #ffffff;
+:root, [data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --card-bg: #242424;
+    --text-color: #f0f0f0;
+    --text-muted: #aaa;
+    --border-light: #333;
+    --input-bg: #1a1a1a;
+    --input-border: #444;
 }
 
-body.dark-mode {
-    --bg-color: #121212;
-    --card-bg: #1e1e1e;
-    --text-color: #e0e0e0;
-    --primary: #e04838;
-    --primary-gradient: linear-gradient(135deg, #e04838 0%, #c93b2b 100%);
-    --bot-bg: #2a2a2a;
-    --user-bg: #e04838;
-    --user-text: #ffffff;
-    --border-light: #333333;
-    --input-bg: #252525;
+[data-theme="light"] {
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --text-muted: #666;
+    --border-light: #e0e0e0;
+    --input-bg: #ffffff;
+    --input-border: #ccc;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    padding: 0;
     transition: background 0.3s, color 0.3s;
-    overflow: hidden;
-}
-
-.brand-logo {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--primary);
-}
-
-.brand-logo span {
-    color: var(--text-color);
-    font-weight: 400;
-}
-
-body.dark-mode .brand-logo span {
-    color: #ffffff;
-}
-
-.auth-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.auth-card {
-    background: var(--card-bg);
-    padding: 35px;
-    border-radius: 16px;
-    border: 1px solid var(--border-light);
-    width: 360px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-    text-align: center;
-}
-
-.auth-card .brand-logo {
-    margin-bottom: 5px;
-}
-
-.subtitle {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 25px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    background: var(--input-bg);
-    color: var(--text-color);
-    box-sizing: border-box;
-    font-size: 14px;
-    outline: none;
-}
-
-.auth-btn {
-    width: 100%;
-    padding: 12px;
-    background: var(--primary-gradient);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    font-size: 14px;
-    box-shadow: 0 4px 12px rgba(201, 59, 43, 0.2);
-}
-
-.auth-switch {
-    text-align: center;
-    font-size: 13px;
-    margin-top: 20px;
-}
-
-.auth-switch a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.chat-header {
-    padding: 15px 40px;
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-    z-index: 100;
-}
-
-.header-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.dark-toggle-btn {
-    background: var(--bot-bg);
-    border: 1px solid var(--border-light);
-    color: var(--text-color);
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.profile-icon-btn {
-    background: var(--bot-bg);
-    border: 1px solid var(--border-light);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--primary);
-    flex-shrink: 0;
 }
 
 .app-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
 }
 
-.chat-container {
-    flex: 1;
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    border: none !important;
+.chat-header {
+    padding: 20px 30px;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-light);
     display: flex;
-    flex-direction: column;
-    box-shadow: none !important;
-}
-
-.chat-box {
-    flex: 1;
-    padding: 25px 40px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    background: var(--card-bg);
-}
-
-.message {
-    max-width: 80%;
-    padding: 15px 20px;
-    border-radius: 14px;
-    line-height: 1.6;
-    font-size: 14px;
-    white-space: pre-line;
-}
-
-.message.bot {
-    background-color: var(--bot-bg);
-    color: var(--text-color);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    border: 1px solid var(--border-light);
-}
-
-.message.user {
-    background: var(--primary-gradient);
-    color: var(--user-text);
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-}
-
-.quick-replies {
-    padding: 12px 40px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    background: var(--card-bg);
-    border-top: 1px solid var(--border-light);
-    flex-shrink: 0;
-}
-
-.quick-btn {
-    background: var(--bot-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-light);
-    padding: 7px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.quick-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
-.chat-input-area {
-    padding: 18px 40px;
-    background: var(--card-bg);
-    border-top: 1px solid var(--border-light);
-    display: flex;
-    gap: 12px;
+    justify-content: space-between;
     align-items: center;
-    flex-shrink: 0;
 }
 
-.chat-input-area input {
-    flex: 1;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: 1px solid var(--border-light);
-    background: var(--bot-bg);
+.brand-logo {
+    color: #ff4d4d;
+    font-weight: 800;
+}
+
+.brand-logo span {
     color: var(--text-color);
-    outline: none;
-    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
 }
 
-.chat-input-area button {
-    background: var(--primary-gradient);
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+.nav-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .profile-main {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px 0;
-    flex: 1;
+    padding: 20px;
 }
 
 .profile-card {
-    background: var(--card-bg);
-    padding: 35px;
-    border-radius: 16px;
+    background-color: var(--card-bg);
     border: 1px solid var(--border-light);
-    width: 400px;
+    padding: 30px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
 }
 
 .avatar-large {
-    width: 75px;
-    height: 75px;
-    background: var(--primary-gradient);
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #ff4d4d, #b30000);
     color: white;
     font-size: 24px;
     font-weight: bold;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
     margin: 0 auto 15px auto;
+}
+
+.text-muted {
+    color: var(--text-muted);
+    font-size: 13px;
 }
 
 .profile-stats {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
-    background: var(--bot-bg);
-    padding: 14px;
+    margin: 20px 0;
+    background: var(--bg-color);
+    padding: 12px;
     border-radius: 12px;
     border: 1px solid var(--border-light);
 }
 
+.stat-box {
+    display: flex;
+    flex-direction: column;
+}
+
 .stat-number {
-    display: block;
     font-size: 18px;
     font-weight: bold;
-    color: var(--primary);
+    color: #ff4d4d;
 }
 
 .stat-label {
-    font-size: 12px;
-    color: #777;
+    font-size: 11px;
+    color: var(--text-muted);
 }
 
 .profile-details {
     text-align: left;
     font-size: 14px;
-    margin-bottom: 20px;
-    line-height: 1.8;
+    margin: 15px 0;
 }
 
-.nav-link {
-    text-decoration: none;
-    font-weight: 600;
-    color: var(--primary);
+.profile-details p {
+    margin: 6px 0;
 }
 
-.logout-btn {
-    background: #d9534f !important;
-    box-shadow: none !important;
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ff4d4d;
+}
+
+.auth-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
     margin-top: 10px;
 }
 
-body.dark-mode .chat-container,
-body.dark-mode header.chat-header,
-body.dark-mode .chat-box,
-body.dark-mode .quick-replies,
-body.dark-mode .chat-input-area {
-    background-color: #1e1e1e !important;
-    border-color: #333333 !important;
+.auth-btn:hover {
+    background-color: #e03b3b;
 }
-body.dark-mode input {
-    background-color: #2a2a2a !important;
-    color: #ffffff !important;
+
+.logout-btn {
+    background-color: #333;
+    color: #ff6b6b;
 }
-body.dark-mode .message.bot {
-    background-color: #2d2d2d !important;
-    color: #e0e0e0 !important;
-}
-body.dark-mode .quick-btn {
-    background: #2a2a2a !important;
-    color: #e0e0e0 !important;
-    border-color: #444444 !important;
+.logout-btn:hover {
+    background-color: #444;
 }

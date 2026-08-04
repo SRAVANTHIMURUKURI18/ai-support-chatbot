@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIT Helpdesk - Profile</title>
+    <script>
+        const storedTheme = localStorage.getItem('vit_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+    </script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -72,7 +76,7 @@
                 document.getElementById('profileRoll').innerText = data.roll_number || email.split('@')[0].toUpperCase();
                 document.getElementById('profileEmail').innerText = data.email || email;
                 
-                document.getElementById('activeTickets').innerText = data.active_tickets ?? 2;
+                document.getElementById('activeTickets').innerText = data.active_tickets ?? 0;
                 document.getElementById('resolvedTickets').innerText = data.resolved_tickets ?? 0;
                 
                 const nameStr = data.name || "Sravanthi Murukuri";

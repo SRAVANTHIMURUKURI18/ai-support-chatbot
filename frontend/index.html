@@ -1,55 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIT Helpdesk - Login</title>
+    <title>Login - VIThelpdesk</title>
+    <script>
+        const storedTheme = localStorage.getItem('vit_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+    </script>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            padding: 35px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .brand-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff4d4d;
+            margin-bottom: 5px;
+        }
+        .brand-logo span {
+            color: var(--text-color);
+            font-style: italic;
+            font-weight: 400;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ff4d4d;
+        }
+        .eye-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 16px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .eye-btn:hover {
+            color: #ff4d4d;
+        }
+        .auth-btn {
+            width: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .auth-btn:hover {
+            background-color: #e03b3b;
+        }
+        .register-link {
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .register-link a {
+            color: #ff4d4d;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body class="auth-body">
-    <div class="auth-card">
-        <h2 class="brand-logo">VIT<span>helpdesk</span></h2>
-        <p class="subtitle">Student Portal Sign In</p>
+<body>
+
+    <div class="login-card">
+        <div class="brand-logo">VIT<span>helpdesk</span></div>
+        <p class="text-muted" style="margin-bottom: 25px;">Student Portal Login</p>
         
-        <form id="loginForm">
+        <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>College Email ID</label>
-                <input type="email" id="loginEmail" placeholder="student@vishnu.edu.in" required>
+                <input type="email" id="loginEmail" placeholder="e.g. 23pa1a05g1@vishnu.edu.in" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="VITB@123" required>
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    <button type="button" class="eye-btn" id="toggleEyeBtn" onclick="togglePasswordVisibility()">👁️</button>
+                </div>
             </div>
-            <button type="submit" class="auth-btn">Sign In</button>
+            <button type="submit" class="auth-btn">Login</button>
         </form>
-        
-        <p class="auth-switch">Don't have an account? <a href="signup.html">Register here</a></p>
+
+        <div class="register-link">
+            Don't have an account? <a href="signup.html">Register here</a>
+        </div>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('loginPassword');
+            const eyeBtn = document.getElementById('toggleEyeBtn');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeBtn.innerText = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                eyeBtn.innerText = '👁️';
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            
+            if (!emailInput || !passwordInput) {
+                alert("Form fields not found!");
+                return;
+            }
+
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value.trim();
 
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/login', {
+                const response = await fetch('http://127.0.0.1:8000/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.detail || 'Login failed');
 
-                localStorage.setItem('vit_logged_in', 'true');
-                localStorage.setItem('vit_email', data.email.toLowerCase());
-                localStorage.setItem('student_email', data.email.toLowerCase());
+                const data = await response.json();
                 
-                window.location.href = 'chat.html';
+                if (response.ok && data.success) {
+                    localStorage.setItem('student_email', email);
+                    localStorage.setItem('vit_email', email);
+                    window.location.href = 'chat.html';
+                } else {
+                    alert(data.detail || 'Invalid email or password.');
+                }
             } catch (err) {
-                alert(err.message);
+                console.error('Login error:', err);
+                alert('Could not connect to backend server. Make sure FastAPI is running.');
             }
-        });
+        }
     </script>
 </body>
 </html>

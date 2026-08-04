@@ -1,19 +1,15 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
-import os
-
 from database import SessionLocal, engine, Base
-from models import Student, Ticket
+from models import Student, Ticket, ChatMessage
 from chatbot import process_chat_message
 
-# Initialize FastAPI application
-app = FastAPI(title="VIT Helpdesk Backend")
+Base.metadata.create_all(bind=engine)
 
-# Enable CORS for frontend connectivity
+app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,110 +18,151 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependency to get database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# Request Validation Schemas
-class SignupRequest(BaseModel):
-    email: EmailStr
-    password: str
-
 class LoginRequest(BaseModel):
-    email: EmailStr
+    email: str
     password: str
+
+class RegisterRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+
+class ChatRequest(BaseModel):
+    session_id: str
+    message: str
 
 class PasswordResetRequest(BaseModel):
-    email: EmailStr
+    email: str
     old_password: str
     new_password: str
 
-class ChatRequest(BaseModel):
-    message: str
-    session_id: str
+class TicketUpdate(BaseModel):
+    status: str
 
-# API Endpoints
-
-@app.post("/api/signup")
-def signup(data: SignupRequest, db: Session = Depends(get_db)):
-    existing_user = db.query(Student).filter(Student.email == data.email.lower()).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered.")
+@app.post("/api/register")
+def register(req: RegisterRequest):
+    db: Session = SessionLocal()
+    clean_email = req.email.lower().strip()
     
-    email_str = data.email.lower()
-    roll_no = email_str.split('@')[0].upper()
+    existing = db.query(Student).filter(Student.email == clean_email).first()
+    if existing:
+        db.close()
+        raise HTTPException(status_code=400, detail="Email already registered")
     
+    # Force default registration password to VITB@123 for everyone
     new_student = Student(
-        email=email_str,
-        password=data.password,
-        name="Sravanthi Murukuri",
-        roll_number=roll_no,
-        branch_year="CSE - 4TH YEAR"
+        name=req.name.strip(),
+        email=clean_email,
+        password="VITB@123"
     )
     db.add(new_student)
     db.commit()
-    db.refresh(new_student)
-    return {"message": "Registration successful", "email": new_student.email}
+    db.close()
+    return {"success": True, "message": "Registration successful. Default password is VITB@123"}
 
 @app.post("/api/login")
-def login(data: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(Student).filter(Student.email == data.email.lower()).first()
-    if not user or user.password != data.password:
-        raise HTTPException(status_code=401, detail="Invalid email or password.")
-    
-    return {"message": "Login successful", "email": user.email}
-
-@app.get("/api/profile/{email}")
-def get_profile(email: str, db: Session = Depends(get_db)):
-    user = db.query(Student).filter(Student.email == email.lower()).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found.")
-    
-    active_count = db.query(Ticket).filter(Ticket.student_id == user.id, Ticket.status == "Active").count()
-    resolved_count = db.query(Ticket).filter(Ticket.student_id == user.id, Ticket.status == "Resolved").count()
-    
-    return {
-        "name": user.name or "Sravanthi Murukuri",
-        "branch_year": user.branch_year or "CSE - 4TH YEAR",
-        "roll_number": user.roll_number or email.split('@')[0].upper(),
-        "email": user.email,
-        "active_tickets": active_count if active_count > 0 else 2,
-        "resolved_tickets": resolved_count
-    }
-
-@app.post("/api/reset-password")
-def reset_password(data: PasswordResetRequest, db: Session = Depends(get_db)):
-    user = db.query(Student).filter(Student.email == data.email.lower()).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found.")
-    
-    if user.password != data.old_password:
-        raise HTTPException(status_code=400, detail="Current password is incorrect.")
-    
-    user.password = data.new_password
-    db.commit()
-    return {"message": "Password updated successfully"}
+def login(req: LoginRequest):
+    db: Session = SessionLocal()
+    student = db.query(Student).filter(Student.email == req.email.lower().strip()).first()
+    db.close()
+    if student and student.password == req.password:
+        return {"success": True, "message": "Login successful"}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
 
 @app.post("/api/chat")
-def chat_endpoint(data: ChatRequest):
-    try:
-        response_text = process_chat_message(data.message, data.session_id)
-        return {"response": response_text}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+def chat(req: ChatRequest):
+    db: Session = SessionLocal()
+    clean_email = req.session_id.lower().strip()
+    student = db.query(Student).filter(Student.email == clean_email).first()
 
-# Mount frontend directory to serve UI pages smoothly
-if os.path.exists("../frontend"):
-    app.mount("/frontend", StaticFiles(directory="../frontend"), name="frontend")
+    if student:
+        db.add(ChatMessage(student_id=student.id, sender="user", message_text=req.message))
+        db.commit()
 
-@app.get("/")
-def root():
-    return RedirectResponse(url="/frontend/index.html")
+    bot_reply = process_chat_message(req.message, req.session_id)
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    if student:
+        db.add(ChatMessage(student_id=student.id, sender="bot", message_text=bot_reply))
+        db.commit()
+
+    db.close()
+    return {"response": bot_reply}
+
+@app.get("/api/chat/history/{email}")
+def get_chat_history(email: str):
+    db: Session = SessionLocal()
+    student = db.query(Student).filter(Student.email == email.lower().strip()).first()
+    if not student:
+        db.close()
+        return []
+    history = db.query(ChatMessage).filter(ChatMessage.student_id == student.id).order_by(ChatMessage.timestamp.asc()).all()
+    result = [{"sender": h.sender, "message": h.message_text} for h in history]
+    db.close()
+    return result
+
+@app.get("/api/profile/{email}")
+def get_profile(email: str):
+    db: Session = SessionLocal()
+    student = db.query(Student).filter(Student.email == email.lower().strip()).first()
+    if not student:
+        db.close()
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    tickets = db.query(Ticket).filter(Ticket.student_id == student.id).all()
+    active_count = sum(1 for t in tickets if t.status in ["Open", "Active"])
+    resolved_count = sum(1 for t in tickets if t.status in ["Resolved", "Closed"])
+
+    data = {
+        "name": student.name,
+        "email": student.email,
+        "branch_year": "CSE - 4TH YEAR",
+        "roll_number": student.email.split('@')[0].upper(),
+        "active_tickets": active_count,
+        "resolved_tickets": resolved_count
+    }
+    db.close()
+    return data
+
+@app.get("/api/tickets/{email}")
+def get_student_tickets(email: str):
+    db: Session = SessionLocal()
+    student = db.query(Student).filter(Student.email == email.lower().strip()).first()
+    if not student:
+        db.close()
+        return []
+    
+    tickets = db.query(Ticket).filter(Ticket.student_id == student.id).all()
+    result = [{
+        "id": t.id,
+        "category": t.category,
+        "description": t.description,
+        "status": t.status
+    } for t in tickets]
+    db.close()
+    return result
+
+@app.patch("/api/tickets/{ticket_id}")
+def update_ticket_status(ticket_id: int, update: TicketUpdate):
+    db: Session = SessionLocal()
+    ticket = db.query(Ticket).filter(Ticket.id == ticket_id).first()
+    if not ticket:
+        db.close()
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    ticket.status = update.status
+    db.commit()
+    db.close()
+    return {"success": True, "message": f"Ticket marked as {update.status}"}
+
+@app.post("/api/reset-password")
+def reset_password(req: PasswordResetRequest):
+    db: Session = SessionLocal()
+    student = db.query(Student).filter(Student.email == req.email.lower().strip()).first()
+    if not student or student.password != req.old_password:
+        db.close()
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    
+    student.password = req.new_password
+    db.commit()
+    db.close()
+    return {"success": True, "message": "Password updated successfully"}

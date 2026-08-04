@@ -1,52 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIT Helpdesk - Sign Up</title>
+    <title>Register - VIThelpdesk</title>
+    <script>
+        const storedTheme = localStorage.getItem('vit_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+    </script>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .register-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            padding: 35px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .brand-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff4d4d;
+            margin-bottom: 5px;
+        }
+        .brand-logo span {
+            color: var(--text-color);
+            font-style: italic;
+            font-weight: 400;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            padding-right: 40px; /* Leave space for eye icon */
+            border-radius: 10px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ff4d4d;
+        }
+        .eye-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 16px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .eye-btn:hover {
+            color: #ff4d4d;
+        }
+        .auth-btn {
+            width: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .auth-btn:hover {
+            background-color: #e03b3b;
+        }
+        .login-link {
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .login-link a {
+            color: #ff4d4d;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body class="auth-body">
-    <div class="auth-card">
-        <h2 class="brand-logo">VIT<span>helpdesk</span></h2>
-        <p class="subtitle">Create Student Account</p>
+<body>
+
+    <div class="register-card">
+        <div class="brand-logo">VIT<span>helpdesk</span></div>
+        <p class="text-muted" style="margin-bottom: 25px;">Student Portal Registration</p>
         
-        <form id="signupForm">
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="regName" placeholder="e.g. Sravanthi Murukuri" required>
+            </div>
             <div class="form-group">
                 <label>College Email ID</label>
-                <input type="email" id="signupEmail" placeholder="student@vishnu.edu.in" required>
+                <input type="email" id="regEmail" placeholder="e.g. 23pa1a05g1@vishnu.edu.in" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="signupPassword" placeholder="Create Password" required>
+                <div class="password-wrapper">
+                    <input type="password" id="regPassword" value="VITB@123" required>
+                    <button type="button" class="eye-btn" id="toggleEyeBtn" onclick="togglePasswordVisibility()">👁️</button>
+                </div>
             </div>
             <button type="submit" class="auth-btn">Register</button>
         </form>
-        
-        <p class="auth-switch">Already have an account? <a href="index.html">Sign In</a></p>
+
+        <div class="login-link">
+            Already have an account? <a href="index.html">Login here</a>
+        </div>
     </div>
 
     <script>
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('regPassword');
+            const eyeBtn = document.getElementById('toggleEyeBtn');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeBtn.innerText = '🙈'; // Switch icon to hidden state
+            } else {
+                passwordInput.type = 'password';
+                eyeBtn.innerText = '👁️'; // Switch icon back to normal visible state
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const nameInput = document.getElementById('regName');
+            const emailInput = document.getElementById('regEmail');
+            const passwordInput = document.getElementById('regPassword');
+            
+            if (!nameInput || !emailInput || !passwordInput) {
+                alert("Form fields not found!");
+                return;
+            }
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value.trim();
 
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/signup', {
+                const response = await fetch('http://127.0.0.1:8000/api/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ name, email, password })
                 });
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.detail || 'Signup failed');
 
-                alert('Registration successful! Please sign in.');
-                window.location.href = 'index.html';
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    alert('Registration successful! Default password is VITB@123. Please login.');
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.detail || 'Registration failed.');
+                }
             } catch (err) {
-                alert(err.message);
+                console.error('Registration error:', err);
+                alert('Could not connect to backend server. Make sure FastAPI is running.');
             }
-        });
+        }
     </script>
 </body>
 </html>

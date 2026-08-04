@@ -1,254 +1,542 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIT Helpdesk - Smart Assistant</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>VIThelpdesk Assistant</title>
+    <script>
+        const storedTheme = localStorage.getItem('vit_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+    </script>
     <style>
-        /* Force strict full-screen viewport layout */
-        html, body {
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+        :root {
+            --bg-color: #1a1a1a;
+            --sidebar-bg: #242424;
+            --text-color: #f0f0f0;
+            --card-bg: #2d2d2d;
+            --border-color: #383838;
+            --input-bg: #1a1a1a;
+            --bot-msg-bg: #2d2d2d;
+            --secondary-btn: #333;
+            --secondary-hover: #444;
+            --secondary-text: #ddd;
         }
 
-        .app-container {
+        [data-theme="light"] {
+            --bg-color: #f4f6f9;
+            --sidebar-bg: #ffffff;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --input-bg: #ffffff;
+            --bot-msg-bg: #e9ecef;
+            --secondary-btn: #e4e6eb;
+            --secondary-hover: #d8dadf;
+            --secondary-text: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            padding: 20px;
+            gap: 8px;
             height: 100vh;
-            width: 100vw;
+            box-sizing: border-box;
+            overflow-y: auto;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .profile-card {
+            background: var(--card-bg);
+            padding: 14px;
+            border-radius: 16px;
+            margin-bottom: 5px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s, border-color 0.3s;
+        }
+        .profile-card:hover {
+            transform: scale(1.02);
+            border-color: #ff4d4d;
+        }
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff4d4d, #b30000);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
+        }
+        .profile-card h3 {
+            margin: 0 0 2px 0;
+            color: #ff4d4d;
+            font-size: 14px;
+        }
+        .profile-card p {
+            margin: 2px 0;
+            font-size: 11px;
+            color: var(--text-color);
+            opacity: 0.8;
+            word-break: break-all;
+        }
+        .ticket-badge {
+            margin-top: 6px;
+            background-color: rgba(255, 77, 77, 0.15);
+            color: #ff4d4d;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+        .sidebar button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: left;
+            transition: background 0.2s;
+        }
+        .sidebar button:hover {
+            background-color: #e03b3b;
+        }
+        .sidebar button.secondary {
+            background-color: var(--secondary-btn);
+            color: var(--secondary-text);
+        }
+        .sidebar button.secondary:hover {
+            background-color: var(--secondary-hover);
         }
 
-        .chat-header {
-            flex-shrink: 0;
-            height: 65px;
-            padding: 0 40px;
+        /* Modal Popup Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .ticket-item {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .ticket-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-light);
-            z-index: 100;
         }
+        .status-pill {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(255, 77, 77, 0.15);
+            color: #ff4d4d;
+        }
+        .resolve-action-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            align-self: flex-end;
+        }
+        .resolve-action-btn:hover { background-color: #218838; }
 
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 65px);
-            max-width: 100% !important;
-            width: 100% !important;
-            margin: 0 !important;
-            border-radius: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            overflow: hidden;
+            background-color: var(--bg-color);
+            height: 100vh;
         }
-
-        .chat-box {
+        .chat-header {
+            padding: 20px;
+            background-color: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .logo-vit {
+            color: #ff4d4d;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .logo-helpdesk {
+            color: var(--text-color);
+            font-style: italic;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        .chat-messages {
             flex: 1;
-            padding: 20px 40px;
-            overflow-y: auto !important;
+            padding: 25px;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            background: var(--bg-color);
+            gap: 15px;
         }
-
-        .quick-replies {
-            flex-shrink: 0;
-            padding: 10px 40px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-light);
-            z-index: 50;
+        .message {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.5;
+            font-size: 14px;
+            word-wrap: break-word;
         }
-
+        .message.user {
+            background-color: #ff4d4d;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .message.bot {
+            background-color: var(--bot-msg-bg);
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
         .chat-input-area {
-            flex-shrink: 0;
-            padding: 15px 40px;
-            background: var(--card-bg);
-            border-top: 1px solid var(--border-light);
+            padding: 20px;
+            background-color: var(--sidebar-bg);
+            border-top: 1px solid var(--border-color);
             display: flex;
             gap: 12px;
-            align-items: center;
-            z-index: 50;
         }
-
         .chat-input-area input {
             flex: 1;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border-light);
-            background: var(--input-bg);
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
             color: var(--text-color);
-            outline: none;
             font-size: 14px;
         }
-
+        .chat-input-area input:focus {
+            outline: none;
+            border-color: #ff4d4d;
+        }
         .chat-input-area button {
-            background: var(--primary-gradient);
+            background-color: #ff4d4d;
             color: white;
             border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
+            padding: 0 24px;
+            border-radius: 14px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            font-weight: bold;
+            font-size: 14px;
         }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .chat-input-area button:hover {
+            background-color: #e03b3b;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="chat-header">
-            <h2 class="brand-logo" id="logoClick" style="cursor:pointer; margin:0;">VIT<span>helpdesk</span></h2>
-            <div class="header-controls">
-                <button type="button" id="darkToggleBtn" class="dark-toggle-btn">🌙 Dark Mode</button>
-                <div class="profile-icon-btn" id="profileBtn" title="Student Profile">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-            </div>
-        </header>
 
-        <main class="chat-container">
-            <div class="chat-box" id="chatMessages">
-                <div class="message bot">Welcome to Vishnu Institute of Technology IT Helpdesk! Please select an option below:
+    <div class="sidebar">
+        <div class="profile-card" onclick="openProfilePage()" title="Click to open full profile page">
+            <div class="profile-avatar" id="profile-initials">SM</div>
+            <h3 id="student-name">Student Portal</h3>
+            <p id="student-email">Loading...</p>
+            <div class="ticket-badge" id="active-tickets-badge">Active Tickets: Loading...</div>
+        </div>
+        <button onclick="scrollToBottom()">💬 Active Chat</button>
+        <button onclick="startNewChat()">✨ New Chat</button>
+        <button onclick="sendQuickCommand('menu')" class="secondary">🏠 Main Menu</button>
+        <button onclick="sendQuickCommand('create ticket')" class="secondary">🎫 Create Support Ticket</button>
+        <button onclick="openTicketsModal()" class="secondary">📋 Manage My Tickets</button>
+        <button onclick="sendQuickCommand('eapcet info')" class="secondary">📊 EAPCET Cutoff Info</button>
+        <button onclick="sendQuickCommand('explore campus clubs & join')" class="secondary">🌟 Explore Clubs</button>
+        <button onclick="toggleTheme()" class="secondary" id="theme-toggle-btn">☀️ Light Mode</button>
+        <button onclick="logout()" class="secondary" style="margin-top: auto; color: #ff6b6b; font-weight: bold;">🚪 Logout</button>
+    </div>
 
-1️⃣ **Create a Support Ticket**
-2️⃣ **Retrieve College Info**
-3️⃣ **Display Active Tickets**
-4️⃣ **Reset Portal Password**
-5️⃣ **Explore Campus Clubs & Join**</div>
+    <!-- Clean Modal Popup for Active Tickets Only -->
+    <div class="modal-overlay" id="ticketsModal">
+        <div class="modal-card">
+            <h3 style="margin-top:0; color:#ff4d4d; font-size:18px;">Active Support Tickets</h3>
+            <p style="font-size:12px; color:var(--secondary-text); margin-bottom:15px;">Review your active issues and mark them as resolved when solved.</p>
+            <div id="modalTicketList" style="display: flex; flex-direction: column; gap: 10px;">
+                <p style="color:#888; text-align:center;">Loading active tickets...</p>
             </div>
+            <button onclick="closeTicketsModal()" style="background:var(--secondary-btn); color:var(--text-color); border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; cursor:pointer; font-weight:600;">Close</button>
+        </div>
+    </div>
 
-            <div class="quick-replies">
-                <button type="button" class="quick-btn" data-text="College Info">College Info</button>
-                <button type="button" class="quick-btn" data-text="EAPCET Info">EAPCET Info</button>
-                <button type="button" class="quick-btn" data-text="Create Ticket">Create Ticket</button>
-                <button type="button" class="quick-btn" data-text="My Tickets">My Tickets</button>
-                <button type="button" class="quick-btn" data-text="menu">Menu</button>
-            </div>
-
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Type a message or select an option..." autocomplete="off">
-                <button type="button" id="sendBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
-            </div>
-        </main>
+    <div class="chat-container">
+        <div class="chat-header">
+            <span class="logo-vit">VIT</span><span class="logo-helpdesk">helpdesk</span>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="Type your message or select an option..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
 
     <script>
-        const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email') || "23pa1a05g1@vishnu.edu.in";
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedChat = localStorage.getItem('chat_history_' + studentEmail);
-            if (savedChat) {
-                chatMessages.innerHTML = savedChat;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            if (localStorage.getItem('dark_mode') === 'true') {
-                document.body.classList.add('dark-mode');
-                const btn = document.getElementById('darkToggleBtn');
-                if (btn) btn.innerText = "☀️ Light Mode";
-            }
-
-            document.getElementById('logoClick').addEventListener('click', () => {
-                window.location.href = 'chat.html';
-            });
-
-            document.getElementById('profileBtn').addEventListener('click', () => {
-                window.location.href = 'profile.html';
-            });
-
-            document.getElementById('darkToggleBtn').addEventListener('click', toggleDarkMode);
-            document.getElementById('sendBtn').addEventListener('click', sendMessage);
-
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            document.querySelectorAll('.quick-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const text = btn.getAttribute('data-text');
-                    chatInput.value = text;
-                    sendMessage();
-                });
-            });
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = localStorage.getItem('vit_theme') || 'dark';
+            const btn = document.getElementById('theme-toggle-btn');
+            if(btn) btn.innerText = currentTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
         });
 
-        async function sendMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('vit_theme', newTheme);
+            document.getElementById('theme-toggle-btn').innerText = newTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+        }
 
-            appendMessage(text, 'user');
-            chatInput.value = '';
+        const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email');
+        if (!studentEmail) {
+            window.location.href = 'index.html';
+        }
 
-            const processingId = appendMessage('Processing...', 'bot');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
 
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: text,
-                        session_id: studentEmail
-                    })
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function refreshProfileData() {
+            fetch(`http://127.0.0.1:8000/api/profile/${encodeURIComponent(studentEmail)}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('student-name').innerText = data.name;
+                    document.getElementById('student-email').innerText = data.email;
+                    document.getElementById('active-tickets-badge').innerText = `Active Tickets: ${data.active_tickets}`;
+                    
+                    const nameParts = data.name.trim().split(' ');
+                    let initials = nameParts[0][0];
+                    if (nameParts.length > 1) {
+                        initials += nameParts[nameParts.length - 1][0];
+                    }
+                    document.getElementById('profile-initials').innerText = initials.toUpperCase();
+                })
+                .catch(err => console.error("Error fetching profile:", err));
+        }
+
+        refreshProfileData();
+
+        // Load Session Storage Chat History
+        const savedSessionHistory = sessionStorage.getItem('vit_chat_session_' + studentEmail);
+        if (savedSessionHistory) {
+            chatMessages.innerHTML = savedSessionHistory;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        } else {
+            triggerBotMessage("menu");
+        }
+
+        function startNewChat() {
+            chatMessages.innerHTML = '';
+            sessionStorage.removeItem('vit_chat_session_' + studentEmail);
+            triggerBotMessage("menu");
+        }
+
+        function openProfilePage() {
+            window.location.href = 'profile.html';
+        }
+
+        // Modal Ticket Functions (Filtering to show ONLY active ones)
+        function openTicketsModal() {
+            document.getElementById('ticketsModal').style.display = 'flex';
+            loadModalTickets();
+        }
+
+        function closeTicketsModal() {
+            document.getElementById('ticketsModal').style.display = 'none';
+        }
+
+        function loadModalTickets() {
+            const listContainer = document.getElementById('modalTicketList');
+            listContainer.innerHTML = '<p style="color:#888; text-align:center;">Loading active tickets...</p>';
+
+            fetch(`http://127.0.0.1:8000/api/tickets/${encodeURIComponent(studentEmail)}`)
+                .then(res => res.json())
+                .then(tickets => {
+                    listContainer.innerHTML = '';
+                    
+                    // Filter out resolved/closed tickets so only active ones show
+                    const activeTickets = tickets.filter(t => t.status !== 'Resolved' && t.status !== 'Closed');
+
+                    if (!activeTickets || activeTickets.length === 0) {
+                        listContainer.innerHTML = '<p style="color:#888; text-align:center;">No active support tickets found.</p>';
+                        return;
+                    }
+
+                    activeTickets.forEach(t => {
+                        const item = document.createElement('div');
+                        item.className = 'ticket-item';
+
+                        item.innerHTML = `
+                            <div class="ticket-top">
+                                <strong style="font-size:14px; color:var(--text-color);">Ticket #${t.id} &bull; ${t.category}</strong>
+                                <span class="status-pill">${t.status}</span>
+                            </div>
+                            <p style="margin:4px 0; font-size:13px; color:var(--secondary-text);">${t.description}</p>
+                            <button class="resolve-action-btn" onclick="resolveTicket(${t.id})">✔ Mark as Resolved</button>
+                        `;
+                        listContainer.appendChild(item);
+                    });
+                })
+                .catch(err => {
+                    listContainer.innerHTML = '<p style="color:#ff4d4d; text-align:center;">Failed to load tickets.</p>';
+                    console.error(err);
                 });
-                const data = await response.json();
-                const procElement = document.getElementById(processingId);
-                if (procElement) procElement.remove();
-                
-                appendMessage(data.response || data.message || "Action completed.", 'bot');
-                localStorage.setItem('chat_history_' + studentEmail, chatMessages.innerHTML);
-            } catch (err) {
-                const procElement = document.getElementById(processingId);
-                if (procElement) procElement.remove();
-                appendMessage('Error connecting to server. Please try again.', 'bot');
+        }
+
+        function resolveTicket(ticketId) {
+            fetch(`http://127.0.0.1:8000/api/tickets/${ticketId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'Resolved' })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    loadModalTickets();
+                    refreshProfileData();
+                } else {
+                    alert('Failed to update ticket status.');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
             }
         }
 
-        function appendMessage(text, sender) {
+        function sendQuickCommand(cmd) {
+            callBackend(cmd);
+        }
+
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            userInput.value = '';
+            callBackend(text);
+        }
+
+        function triggerBotMessage(text) {
+            callBackend(text);
+        }
+
+        function callBackend(messageText) {
+            appendMessageUI(messageText, "user");
+
+            fetch('http://127.0.0.1:8000/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: studentEmail, message: messageText })
+            })
+            .then(res => res.json())
+            .then(data => {
+                appendMessageUI(data.response, "bot");
+                refreshProfileData();
+            })
+            .catch(err => {
+                appendMessageUI("⚠️ Error connecting to server.", "bot");
+                console.error(err);
+            });
+        }
+
+        function appendMessageUI(text, sender) {
             const div = document.createElement('div');
             div.className = `message ${sender}`;
-            div.id = 'msg-' + Math.random().toString(36).substring(2, 9);
-            div.innerText = text;
+            
+            let formattedText = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+
+            div.innerHTML = formattedText;
+            
+            if (sender === 'bot') {
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.style.marginTop = '8px';
+                feedbackDiv.style.fontSize = '12px';
+                feedbackDiv.innerHTML = `
+                    <span style="color: #888; margin-right: 8px;">Helpful?</span>
+                    <button onclick="sendFeedback('Helpful')" style="background:none; border:none; cursor:pointer;">👍</button>
+                    <button onclick="sendFeedback('Not Helpful')" style="background:none; border:none; cursor:pointer;">👎</button>
+                `;
+                div.appendChild(feedbackDiv);
+            }
+
             chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            localStorage.setItem('chat_history_' + studentEmail, chatMessages.innerHTML);
-            return div.id;
+            sessionStorage.setItem('vit_chat_session_' + studentEmail, chatMessages.innerHTML);
         }
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const btn = document.getElementById('darkToggleBtn');
-            if (document.body.classList.contains('dark-mode')) {
-                btn.innerText = "☀️ Light Mode";
-                localStorage.setItem('dark_mode', 'true');
-            } else {
-                btn.innerText = "🌙 Dark Mode";
-                localStorage.setItem('dark_mode', 'false');
-            }
+        function sendFeedback(rating) {
+            alert("Thank you for your feedback (" + rating + ")!");
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('student_email');
+            localStorage.removeItem('vit_email');
+            window.location.href = 'index.html';
         }
     </script>
 </body>

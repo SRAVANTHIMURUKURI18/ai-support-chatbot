@@ -1,0 +1,58 @@
+{
+  "academics": [
+    {
+      "question": "attendance requirements",
+      "answer": "Students must maintain a strict minimum of 75% attendance across all theory and laboratory courses to be eligible for mid-term and semester-end examinations."
+    },
+    {
+      "question": "biometric logging",
+      "answer": "Mandatory biometric attendance logging is enforced daily between 8:30 AM to 9:00 AM and evening departure at 4:10 PM sharp."
+    }
+  ],
+  "hostel": [
+    {
+      "question": "hostel outing guide",
+      "answer": "Outing applications must be submitted via the portal 24 hours prior. Automated IVRS confirmation calls are triggered to parents, and approval is mandatory."
+    },
+    {
+      "question": "mess timings and food",
+      "answer": "Mess serving hours: Breakfast (7:30 AM - 9:30 AM), Lunch (12:00 PM - 2:00 PM), Snacks (4:30 PM - 5:30 PM), and Dinner (7:30 PM - 9:30 PM)."
+    }
+  ],
+  "placements": [
+    {
+      "question": "placement stats (2021-2026)",
+      "answer": "Vishnu Institute of Technology placement records:\n• 2021 Batch: 620+ Offers (Highest: 32 LPA, Avg: 4.2 LPA)\n• 2022 Batch: 750+ Offers (Highest: 41 LPA, Avg: 4.8 LPA)\n• 2023 Batch: 810+ Offers (Highest: 44 LPA, Avg: 5.2 LPA)\n• 2024 Batch: 780+ Offers (Highest: 38 LPA, Avg: 5.0 LPA)\n• 2025 Batch: 830+ Offers (Highest: 42 LPA, Avg: 5.5 LPA)\n• 2026 Batch: 500+ Offers secured with Amazon, TCS, Wipro, ServiceNow."
+    }
+  ],
+  "library": [
+    {
+      "question": "central library timings",
+      "answer": "Open from 8:00 AM to 8:00 PM on working days and 9:00 AM to 1:00 PM on Saturdays. Houses over 55,000 volumes and digital journals."
+    }
+  ],
+  "examination": [
+    {
+      "question": "examination structure",
+      "answer": "Autonomous semester system with two mid-term exams (30 marks) and end-semester external examinations (70 marks)."
+    }
+  ],
+  "fee": [
+    {
+      "question": "fee counter details",
+      "answer": "Located on the ground floor of the main administrative block. Open from 9:30 AM to 4:00 PM on working days."
+    }
+  ],
+  "it_support": [
+    {
+      "question": "it and wi-fi support",
+      "answer": "High-speed campus Wi-Fi is accessible to all students. Configure devices by logging into the IT portal using your roll number."
+    }
+  ],
+  "eapcet": [
+    {
+      "question": "eapcet 2025 cutoffs and admissions",
+      "answer": "🎓 **VISHNU INSTITUTE OF TECHNOLOGY :: BHIMAVARAM**\n📊 **EAPCET - 2025 (1st Phase) Last Ranks Admitted:**\n\n**CSE**\n[OC] MALE : 4433 || FEMALE : 5213\n[EWS] MALE : 5032 || FEMALE : 5744\n[BC_A] MALE : 8905 || FEMALE : 12366\n[BC_B] MALE : 7269 || FEMALE : 10315\n[BC_C] MALE : -- || FEMALE : 28955\n[BC_D] MALE : 5976 || FEMALE : 6601\n[BC_E] MALE : 21625 || FEMALE : 14687\n[SC] MALE : 128632 || FEMALE : 30515\n[ST] MALE : 74436 || FEMALE : 79778\n\n**IT**\n[OC] MALE : 13178 || FEMALE : 12907\n[EWS] MALE : 14633 || FEMALE : 14652\n[BC_A] MALE : 26915 || FEMALE : 29842\n[BC_B] MALE : 20611 || FEMALE : 20938\n[BC_C] MALE : 47210 || FEMALE : --\n[BC_D] MALE : 20065 || FEMALE : 19761\n[BC_E] MALE : 37859 || FEMALE : 33808\n[SC] MALE : 116010 || FEMALE : 127581\n[ST] MALE : 155318 || FEMALE : 146405\n\n**AI & DS**\n[OC] MALE : 6625 || FEMALE : 7399\n[EWS] MALE : 7191 || FEMALE : 7688\n[BC_A] MALE : 12672 || FEMALE : 19598\n[BC_B] MALE : 12281 || FEMALE : 12442\n[BC_C] MALE : 78325 || FEMALE : --\n[BC_D] MALE : 8925 || FEMALE : 10790\n[BC_E] MALE : 18699 || FEMALE : 26815\n[SC] MALE : 37990 || FEMALE : 64207\n[ST] MALE : 102357 || FEMALE : 113609\n\n**AI & ML**\n[OC] MALE : 4811 || FEMALE : 6105\n[EWS] MALE : 5377 || FEMALE : 6346\n[BC_A] MALE : 10725 || FEMALE : 11919\n[BC_B] MALE : 8565 || FEMALE : 9478\n[BC_C] MALE : -- || FEMALE : --\n[BC_D] MALE : 6907 || FEMALE : 8534\n[BC_E] MALE : 11199 || FEMALE : 28862\n[SC] MALE : 162962 || FEMALE : 33487\n[ST] MALE : 80396 || FEMALE : 90802\n\n**ECE**\n[OC] MALE : 8364 || FEMALE : 12064\n[EWS] MALE : 11746 || FEMALE : 12604\n[BC_A] MALE : 16549 || FEMALE : 24481\n[BC_B] MALE : 16418 || FEMALE : 17163\n[BC_C] MALE : 22974 || FEMALE : --\n[BC_D] MALE : 10762 || FEMALE : 15290\n[BC_E] MALE : 43923 || FEMALE : 50516\n[SC] MALE : 46800 || FEMALE : 65593\n[ST] MALE : 93073 || FEMALE : 105938\n\n📋 **Required Admission Documents:**\n1. EAMCET/EAPCET Rank Card & Hall Ticket\n2. Study Certificates (6th to 10+2)\n3. Transfer Certificate (TC)\n4. Income & Caste Certificates\n\n📍 **Admission Venue:** Ground floor of the main administrative block."
+    }
+  ]
+}
