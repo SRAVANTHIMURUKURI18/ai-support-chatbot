@@ -134,6 +134,49 @@
             background-color: var(--secondary-hover);
         }
 
+        /* Search Section in Sidebar */
+        .sidebar-search-container {
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .sidebar-search-container input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+        .sidebar-search-container input:focus {
+            outline: none;
+            border-color: #ff4d4d;
+        }
+        .search-results-dropdown {
+            position: absolute;
+            top: 45px;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .search-result-item {
+            padding: 10px 12px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        .search-result-item:hover {
+            background-color: rgba(255, 77, 77, 0.1);
+        }
+
         /* Modal Popup Overlay */
         .modal-overlay {
             display: none;
@@ -205,15 +248,41 @@
             height: 100vh;
         }
         .chat-header {
-            padding: 20px;
+            padding: 15px 25px;
             background-color: var(--sidebar-bg);
             border-bottom: 1px solid var(--border-color);
             font-size: 20px;
             font-weight: bold;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-brand {
+            display: flex;
             align-items: center;
             gap: 4px;
         }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .export-select {
+            background-color: var(--secondary-btn);
+            color: var(--secondary-text);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .export-select:hover {
+            background-color: var(--secondary-hover);
+        }
+
         .logo-vit {
             color: #ff4d4d;
             font-weight: 800;
@@ -254,14 +323,38 @@
             border-bottom-left-radius: 4px;
             border: 1px solid var(--border-color);
         }
+        .suggested-actions {
+            padding: 10px 25px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+        }
+        .suggested-actions button {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .suggested-actions button:hover {
+            border-color: #ff4d4d;
+            background-color: rgba(255, 77, 77, 0.05);
+        }
         .chat-input-area {
             padding: 20px;
             background-color: var(--sidebar-bg);
             border-top: 1px solid var(--border-color);
             display: flex;
             gap: 12px;
+            align-items: center;
         }
-        .chat-input-area input {
+        .chat-input-area textarea {
             flex: 1;
             padding: 14px 16px;
             border-radius: 14px;
@@ -269,23 +362,34 @@
             background-color: var(--input-bg);
             color: var(--text-color);
             font-size: 14px;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
         }
-        .chat-input-area input:focus {
+        .chat-input-area textarea:focus {
             outline: none;
             border-color: #ff4d4d;
         }
-        .chat-input-area button {
+        .send-btn {
             background-color: #ff4d4d;
             color: white;
             border: none;
-            padding: 0 24px;
+            width: 48px;
+            height: 48px;
             border-radius: 14px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
         }
-        .chat-input-area button:hover {
+        .send-btn:hover:not(:disabled) {
             background-color: #e03b3b;
+        }
+        .send-btn:disabled {
+            background-color: var(--secondary-btn);
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -298,6 +402,13 @@
             <p id="student-email">Loading...</p>
             <div class="ticket-badge" id="active-tickets-badge">Active Tickets: Loading...</div>
         </div>
+
+        <!-- Live FAQ Search Bar -->
+        <div class="sidebar-search-container">
+            <input type="text" id="faqSearchInput" placeholder="🔍 Search campus FAQs..." oninput="searchFAQs(this.value)">
+            <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+        </div>
+
         <button onclick="scrollToBottom()">💬 Active Chat</button>
         <button onclick="startNewChat()">✨ New Chat</button>
         <button onclick="sendQuickCommand('menu')" class="secondary">🏠 Main Menu</button>
@@ -339,12 +450,37 @@
 
     <div class="chat-container">
         <div class="chat-header">
-            <span class="logo-vit">VIT</span><span class="logo-helpdesk">helpdesk</span>
+            <div class="header-brand">
+                <span class="logo-vit">VIT</span><span class="logo-helpdesk">helpdesk</span>
+            </div>
+            <div class="header-actions">
+                <select id="exportDropdown" class="export-select" onchange="handleExportSelection(this)">
+                    <option value="" disabled selected>📥 Export Chat...</option>
+                    <option value="txt">Export as Text (.txt)</option>
+                    <option value="pdf">Export as PDF</option>
+                </select>
+            </div>
         </div>
+
         <div class="chat-messages" id="chat-messages"></div>
+
+        <!-- Suggested Quick Actions Bar -->
+        <div class="suggested-actions">
+            <button onclick="sendQuickCommand('menu')">🏠 Main Menu</button>
+            <button onclick="sendQuickCommand('college info')">📚 College Info</button>
+            <button onclick="sendQuickCommand('my tickets')">🔍 My Tickets</button>
+            <button onclick="sendQuickCommand('placement statistics')">📈 Placements</button>
+        </div>
+
         <div class="chat-input-area">
-            <input type="text" id="user-input" placeholder="Type your message or select an option..." onkeypress="handleKeyPress(event)">
-            <button onclick="sendMessage()">Send</button>
+            <textarea id="user-input" placeholder="Type your message or select an option..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
+            <button id="sendBtn" class="send-btn" onclick="sendMessage()" title="Send Message" disabled>
+                <!-- Send Icon SVG -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -372,6 +508,14 @@
 
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // Input auto-resize and send button state handler
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            sendBtn.disabled = this.value.trim() === '';
+        });
 
         function scrollToBottom() {
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -414,6 +558,103 @@
 
         function openProfilePage() {
             window.location.href = 'profile.html';
+        }
+
+        // Live FAQ Search Bar Handler
+        function searchFAQs(query) {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            if (!query || query.trim() === '') {
+                dropdown.style.display = 'none';
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            fetch(`http://127.0.0.1:8000/api/search?query=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    dropdown.innerHTML = '';
+                    if (!data.results || data.results.length === 0) {
+                        dropdown.style.display = 'block';
+                        dropdown.innerHTML = '<div class="search-result-item" style="color:#888;">No matching questions found</div>';
+                        return;
+                    }
+
+                    dropdown.style.display = 'block';
+                    data.results.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'search-result-item';
+                        div.innerHTML = `<strong>${item.question}</strong>`;
+                        div.onclick = () => {
+                            dropdown.style.display = 'none';
+                            document.getElementById('faqSearchInput').value = '';
+                            callBackend(item.question);
+                        };
+                        dropdown.appendChild(div);
+                    });
+                })
+                .catch(err => console.error("Search error:", err));
+        }
+
+        // Close search dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const searchContainer = document.querySelector('.sidebar-search-container');
+            if (searchContainer && !searchContainer.contains(e.target)) {
+                document.getElementById('searchResultsDropdown').style.display = 'none';
+            }
+        });
+
+        // Dropdown Export Handler for TXT or PDF
+        function handleExportSelection(selectElement) {
+            const format = selectElement.value;
+            if (!format) return;
+
+            if (!chatMessages || chatMessages.innerText.trim() === "") {
+                alert("No chat history to export!");
+                selectElement.value = "";
+                return;
+            }
+
+            if (format === 'txt') {
+                let transcript = "--- VISHNU IT HELPDESK CHAT TRANSCRIPT ---\n\n" + chatMessages.innerText;
+                const blob = new Blob([transcript], { type: "text/plain;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "vishnu_helpdesk_transcript.txt";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            } else if (format === 'pdf') {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Vishnu IT Helpdesk - Chat Transcript</title>
+                            <style>
+                                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #333; }
+                                h2 { color: #ff4d4d; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+                                .message { margin-bottom: 15px; padding: 12px 16px; border-radius: 8px; line-height: 1.5; font-size: 14px; max-width: 80%; }
+                                .user { background-color: #ffe6e6; color: #b30000; margin-left: auto; text-align: right; border-left: 4px solid #ff4d4d; }
+                                .bot { background-color: #f4f6f9; color: #333; margin-right: auto; border-left: 4px solid #333; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2>Vishnu IT Helpdesk :: Chat Transcript</h2>
+                            <div>${chatMessages.innerHTML}</div>
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    window.close();
+                                };
+                            <\/script>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            }
+
+            selectElement.value = "";
         }
 
         // Modal Ticket Functions & Thread Management
@@ -561,8 +802,11 @@
         }
 
         function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                if (!sendBtn.disabled) {
+                    sendMessage();
+                }
             }
         }
 
@@ -574,6 +818,8 @@
             const text = userInput.value.trim();
             if (!text) return;
             userInput.value = '';
+            userInput.style.height = 'auto';
+            sendBtn.disabled = true;
             callBackend(text);
         }
 

@@ -116,6 +116,26 @@ function escapeHTML(str) {
     }[tag]));
 }
 
+// Function to export chat history transcript to a text file
+function exportChatTranscript() {
+    if (!chatWindow || chatWindow.innerText.trim() === "") {
+        alert("No chat history to export!");
+        return;
+    }
+
+    let transcript = "--- VISHNU IT HELPDESK CHAT TRANSCRIPT ---\n\n" + chatWindow.innerText;
+
+    const blob = new Blob([transcript], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "vishnu_helpdesk_transcript.txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
 userInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();

@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+import json
+import os
+
 from database import SessionLocal, engine, Base
 from models import Student, Ticket, ChatMessage, TicketComment
 from chatbot import process_chat_message
@@ -56,12 +59,12 @@ def register(req: RegisterRequest):
     new_student = Student(
         name=req.name.strip(),
         email=clean_email,
-        password="VITB@123"
+        password=req.password if req.password else "VITB@123"
     )
     db.add(new_student)
     db.commit()
     db.close()
-    return {"success": True, "message": "Registration successful. Default password is VITB@123"}
+    return {"success": True, "message": "Registration successful."}
 
 @app.post("/api/login")
 def login(req: LoginRequest):
@@ -91,6 +94,29 @@ def chat(req: ChatRequest):
     db.close()
     return {"response": bot_reply}
 
+@app.get("/api/search")
+def search_faqs(query: str):
+    faq_path = "backend/faq_dataset.json"
+    if not os.path.exists(faq_path):
+        faq_path = "faq_dataset.json" # Fallback relative root path check
+    
+    if not os.path.exists(faq_path):
+        return {"results": []}
+    
+    with open(faq_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    results = []
+    q_lower = query.lower()
+    
+    for category, items in data.items():
+        if isinstance(items, list):
+            for item in items:
+                if q_lower in item.get("question", "").lower() or q_lower in item.get("answer", "").lower():
+                    results.append(item)
+                    
+    return {"results": results[:10]}
+
 @app.get("/api/chat/history/{email}")
 def get_chat_history(email: str):
     db: Session = SessionLocal()
@@ -112,7 +138,7 @@ def get_profile(email: str):
         raise HTTPException(status_code=404, detail="Student not found")
     
     tickets = db.query(Ticket).filter(Ticket.student_id == student.id).all()
-    active_count = sum(1 for t in tickets if t.status in ["Open", "Active"])
+    active_count = sum(1 for t in tickets if t.status not in ["Resolved", "Closed"])
     resolved_count = sum(1 for t in tickets if t.status in ["Resolved", "Closed"])
 
     data = {
