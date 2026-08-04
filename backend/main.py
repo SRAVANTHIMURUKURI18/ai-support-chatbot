@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
-from models import Student, Ticket, ChatMessage
+from models import Student, Ticket, ChatMessage, TicketComment
 from chatbot import process_chat_message
 
 Base.metadata.create_all(bind=engine)
@@ -39,6 +39,10 @@ class PasswordResetRequest(BaseModel):
 class TicketUpdate(BaseModel):
     status: str
 
+class CommentCreate(BaseModel):
+    sender: str
+    message: str
+
 @app.post("/api/register")
 def register(req: RegisterRequest):
     db: Session = SessionLocal()
@@ -49,7 +53,6 @@ def register(req: RegisterRequest):
         db.close()
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    # Force default registration password to VITB@123 for everyone
     new_student = Student(
         name=req.name.strip(),
         email=clean_email,
@@ -153,6 +156,30 @@ def update_ticket_status(ticket_id: int, update: TicketUpdate):
     db.commit()
     db.close()
     return {"success": True, "message": f"Ticket marked as {update.status}"}
+
+@app.get("/api/tickets/{ticket_id}/comments")
+def get_ticket_comments(ticket_id: int):
+    db: Session = SessionLocal()
+    try:
+        comments = db.query(TicketComment).filter(TicketComment.ticket_id == ticket_id).all()
+        return [{"id": c.id, "sender": c.sender, "message": c.message, "timestamp": str(c.timestamp)} for c in comments]
+    finally:
+        db.close()
+
+@app.post("/api/tickets/{ticket_id}/comments")
+def add_ticket_comment(ticket_id: int, payload: CommentCreate):
+    db: Session = SessionLocal()
+    try:
+        new_comment = TicketComment(
+            ticket_id=ticket_id,
+            sender=payload.sender,
+            message=payload.message
+        )
+        db.add(new_comment)
+        db.commit()
+        return {"success": True, "message": "Comment added successfully"}
+    finally:
+        db.close()
 
 @app.post("/api/reset-password")
 def reset_password(req: PasswordResetRequest):

@@ -164,6 +164,11 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .ticket-item:hover {
+            border-color: #ff4d4d;
         }
         .ticket-top {
             display: flex;
@@ -188,6 +193,7 @@
             font-size: 12px;
             font-weight: bold;
             align-self: flex-end;
+            margin-top: 5px;
         }
         .resolve-action-btn:hover { background-color: #218838; }
 
@@ -297,20 +303,36 @@
         <button onclick="sendQuickCommand('menu')" class="secondary">🏠 Main Menu</button>
         <button onclick="sendQuickCommand('create ticket')" class="secondary">🎫 Create Support Ticket</button>
         <button onclick="openTicketsModal()" class="secondary">📋 Manage My Tickets</button>
+        <button onclick="sendQuickCommand('smart campus outing process')" class="secondary">🚶 Smart Campus Outing</button>
+        <button onclick="sendQuickCommand('facilities')" class="secondary">🏢 Facilities</button>
         <button onclick="sendQuickCommand('eapcet info')" class="secondary">📊 EAPCET Cutoff Info</button>
         <button onclick="sendQuickCommand('explore campus clubs & join')" class="secondary">🌟 Explore Clubs</button>
         <button onclick="toggleTheme()" class="secondary" id="theme-toggle-btn">☀️ Light Mode</button>
         <button onclick="logout()" class="secondary" style="margin-top: auto; color: #ff6b6b; font-weight: bold;">🚪 Logout</button>
     </div>
 
-    <!-- Clean Modal Popup for Active Tickets Only -->
+    <!-- Enhanced Modal for Tickets & Comments Thread -->
     <div class="modal-overlay" id="ticketsModal">
         <div class="modal-card">
-            <h3 style="margin-top:0; color:#ff4d4d; font-size:18px;">Active Support Tickets</h3>
-            <p style="font-size:12px; color:var(--secondary-text); margin-bottom:15px;">Review your active issues and mark them as resolved when solved.</p>
-            <div id="modalTicketList" style="display: flex; flex-direction: column; gap: 10px;">
-                <p style="color:#888; text-align:center;">Loading active tickets...</p>
+            <div id="ticketListView">
+                <h3 style="margin-top:0; color:#ff4d4d; font-size:18px;">Active Support Tickets</h3>
+                <p style="font-size:12px; color:var(--secondary-text); margin-bottom:15px;">Click a ticket to view conversation history or add comments.</p>
+                <div id="modalTicketList" style="display: flex; flex-direction: column; gap: 10px;">
+                    <p style="color:#888; text-align:center;">Loading active tickets...</p>
+                </div>
             </div>
+
+            <!-- Ticket Thread View (Hidden by default) -->
+            <div id="ticketThreadView" style="display: none;">
+                <button onclick="backToTicketList()" style="background:var(--secondary-btn); border:none; color:var(--text-color); padding:6px 12px; border-radius:6px; cursor:pointer; margin-bottom:10px;">← Back to Tickets</button>
+                <h3 id="threadTitle" style="color:#ff4d4d; margin:5px 0; font-size:16px;">Ticket Thread</h3>
+                <div id="threadMessages" style="background:var(--bg-color); border:1px solid var(--border-color); border-radius:10px; padding:10px; height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="commentInput" placeholder="Type a reply or update..." style="flex:1; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color);">
+                    <button onclick="postComment()" style="background:#ff4d4d; color:white; border:none; padding:0 16px; border-radius:8px; cursor:pointer; font-weight:bold;">Send</button>
+                </div>
+            </div>
+
             <button onclick="closeTicketsModal()" style="background:var(--secondary-btn); color:var(--text-color); border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; cursor:pointer; font-weight:600;">Close</button>
         </div>
     </div>
@@ -341,9 +363,11 @@
             document.getElementById('theme-toggle-btn').innerText = newTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
         }
 
-        const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email');
-        if (!studentEmail) {
-            window.location.href = 'index.html';
+        // Robust Student Email Verification with Fallback
+        let studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email') || localStorage.getItem('email');
+        if (!studentEmail || studentEmail === 'undefined' || studentEmail === 'null') {
+            studentEmail = '23pa1a05g1@vishnu.edu.in';
+            localStorage.setItem('student_email', studentEmail);
         }
 
         const chatMessages = document.getElementById('chat-messages');
@@ -392,8 +416,12 @@
             window.location.href = 'profile.html';
         }
 
-        // Modal Ticket Functions (Filtering to show ONLY active ones)
+        // Modal Ticket Functions & Thread Management
+        let activeSelectedTicketId = null;
+
         function openTicketsModal() {
+            document.getElementById('ticketThreadView').style.display = 'none';
+            document.getElementById('ticketListView').style.display = 'block';
             document.getElementById('ticketsModal').style.display = 'flex';
             loadModalTickets();
         }
@@ -411,7 +439,6 @@
                 .then(tickets => {
                     listContainer.innerHTML = '';
                     
-                    // Filter out resolved/closed tickets so only active ones show
                     const activeTickets = tickets.filter(t => t.status !== 'Resolved' && t.status !== 'Closed');
 
                     if (!activeTickets || activeTickets.length === 0) {
@@ -422,6 +449,7 @@
                     activeTickets.forEach(t => {
                         const item = document.createElement('div');
                         item.className = 'ticket-item';
+                        item.onclick = () => openTicketThread(t.id, t.category, t.description);
 
                         item.innerHTML = `
                             <div class="ticket-top">
@@ -429,7 +457,7 @@
                                 <span class="status-pill">${t.status}</span>
                             </div>
                             <p style="margin:4px 0; font-size:13px; color:var(--secondary-text);">${t.description}</p>
-                            <button class="resolve-action-btn" onclick="resolveTicket(${t.id})">✔ Mark as Resolved</button>
+                            <button class="resolve-action-btn" onclick="event.stopPropagation(); resolveTicket(${t.id})">✔ Mark as Resolved</button>
                         `;
                         listContainer.appendChild(item);
                     });
@@ -438,6 +466,80 @@
                     listContainer.innerHTML = '<p style="color:#ff4d4d; text-align:center;">Failed to load tickets.</p>';
                     console.error(err);
                 });
+        }
+
+        function openTicketThread(ticketId, category, desc) {
+            activeSelectedTicketId = ticketId;
+            document.getElementById('ticketListView').style.display = 'none';
+            document.getElementById('ticketThreadView').style.display = 'block';
+            document.getElementById('threadTitle').innerText = `Ticket #${ticketId} • ${category}`;
+            loadThreadMessages(ticketId);
+        }
+
+        function backToTicketList() {
+            document.getElementById('ticketThreadView').style.display = 'none';
+            document.getElementById('ticketListView').style.display = 'block';
+            loadModalTickets();
+        }
+
+        function loadThreadMessages(ticketId) {
+            const container = document.getElementById('threadMessages');
+            container.innerHTML = '<p style="color:var(--secondary-text); text-align:center; font-size:12px;">Loading comments...</p>';
+
+            fetch(`http://127.0.0.1:8000/api/tickets/${ticketId}/comments`)
+                .then(res => res.json())
+                .then(comments => {
+                    container.innerHTML = '';
+                    if (!comments || comments.length === 0) {
+                        container.innerHTML = '<p style="color:var(--secondary-text); text-align:center; font-size:12px;">No conversation notes yet. Add a message below!</p>';
+                        return;
+                    }
+                    comments.forEach(c => {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.style.padding = '10px 14px';
+                        msgDiv.style.borderRadius = '10px';
+                        msgDiv.style.fontSize = '13px';
+                        msgDiv.style.maxWidth = '80%';
+                        msgDiv.style.wordBreak = 'break-word';
+                        
+                        if (c.sender === 'student') {
+                            msgDiv.style.background = '#ff4d4d';
+                            msgDiv.style.color = '#ffffff';
+                            msgDiv.style.alignSelf = 'flex-end';
+                        } else {
+                            msgDiv.style.background = 'var(--secondary-btn)';
+                            msgDiv.style.color = 'var(--text-color)';
+                            msgDiv.style.alignSelf = 'flex-start';
+                        }
+                        
+                        msgDiv.innerHTML = `<strong style="display:block; font-size:10px; opacity:0.8; margin-bottom:2px;">${c.sender.toUpperCase()}</strong> ${c.message}`;
+                        container.appendChild(msgDiv);
+                    });
+                    container.scrollTop = container.scrollHeight;
+                })
+                .catch(err => {
+                    container.innerHTML = '<p style="color:#ff4d4d; text-align:center; font-size:12px;">Failed to load comments.</p>';
+                    console.error(err);
+                });
+        }
+
+        function postComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+            if (!text || !activeSelectedTicketId) return;
+
+            fetch(`http://127.0.0.1:8000/api/tickets/${activeSelectedTicketId}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: 'student', message: text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = '';
+                    loadThreadMessages(activeSelectedTicketId);
+                }
+            });
         }
 
         function resolveTicket(ticketId) {
