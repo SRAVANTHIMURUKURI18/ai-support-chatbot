@@ -168,6 +168,12 @@ input:focus {
     background-color: #333;
     color: #ff6b6b;
 }
+
 .logout-btn:hover {
     background-color: #444;
+}
+
+/* Added support for message bubbles to properly stack newlines and bullets */
+.chat-message, .bot-message, .message-content {
+    white-space: pre-line;
 }

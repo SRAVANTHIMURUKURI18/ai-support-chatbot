@@ -1,31 +1,18 @@
-import os
-import torch
+from backend.faq_knowledge import COLLEGE_KNOWLEDGE
 
-# Optimize CPU threads to make transformer embedding computation instantaneous
-torch.set_num_threads(4)
-
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-
-VECTOR_DB_PATH = "backend/faiss_index"
-
-# Pre-load model and vector store globally on server start (Done ONCE)
-print("🚀 Initializing global RAG components...")
-_embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
-if os.path.exists(VECTOR_DB_PATH):
-    _vector_store = FAISS.load_local(VECTOR_DB_PATH, _embeddings, allow_dangerous_deserialization=True)
-    print("✅ FAISS Vector Database loaded into memory successfully!")
-else:
-    _vector_store = None
-
-def query_rag(question: str) -> str:
-    if not _vector_store:
-        return "Vector database not found."
+def query_rag(query_text: str) -> str:
+    """Returns strictly isolated topic information based on user keywords."""
+    query_lower = query_text.lower()
     
-    # Perform lightning-fast similarity search from memory
-    docs = _vector_store.similarity_search(question, k=1)
-    if not docs:
-        return ""
+    # Match precise topics to prevent mixing data
+    if any(k in query_lower for k in ["bus", "transport", "travel", "pickup", "route", "timing"]):
+        return COLLEGE_KNOWLEDGE["bus"]
+    elif any(k in query_lower for k in ["hostel", "room", "curfew", "gate", "vasishta", "vedavathi"]):
+        return COLLEGE_KNOWLEDGE["hostel"]
+    elif any(k in query_lower for k in ["fee", "fees", "payment", "tuition", "cost"]):
+        return COLLEGE_KNOWLEDGE["fee"]
+    elif any(k in query_lower for k in ["college", "address", "location", "vitb", "bhimavaram", "affili"]):
+        return COLLEGE_KNOWLEDGE["college"]
         
-    return docs[0].page_content.strip()
+    # Default fallback if no specific keyword matches
+    return "I couldn't find exact guidelines for that topic. Type **'menu'** to view the main options."

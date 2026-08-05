@@ -1,5 +1,6 @@
-from database import SessionLocal
-from models import Announcement
+
+from backend.database import SessionLocal
+from backend.models import Announcement
 
 db = SessionLocal()
 new_announcement = Announcement(
