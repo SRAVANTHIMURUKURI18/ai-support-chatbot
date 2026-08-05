@@ -1,48 +1,41 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-from database import Base
-
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from backend.database import Base
 class Student(Base):
     __tablename__ = "students"
-
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
-    
-    tickets = relationship("Ticket", back_populates="student", cascade="all, delete-orphan")
-    messages = relationship("ChatMessage", back_populates="student", cascade="all, delete-orphan")
 
 class Ticket(Base):
     __tablename__ = "tickets"
-
     id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)
+    student_id = Column(Integer, nullable=False)
     category = Column(String, nullable=False)
     description = Column(String, nullable=False)
     status = Column(String, default="Open")
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    student = relationship("Student", back_populates="tickets")
-    comments = relationship("TicketComment", backref="ticket", cascade="all, delete-orphan")
 
 class TicketComment(Base):
     __tablename__ = "ticket_comments"
-
     id = Column(Integer, primary_key=True, index=True)
-    ticket_id = Column(Integer, ForeignKey("tickets.id"))
-    sender = Column(String)  # 'student' or 'admin'
-    message = Column(String)
+    ticket_id = Column(Integer, nullable=False)
+    sender = Column(String, nullable=False)
+    message = Column(String, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
-
     id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.id"))
-    sender = Column(String)
-    message_text = Column(String)
+    student_id = Column(Integer, nullable=False)
+    sender = Column(String, nullable=False)
+    message_text = Column(String, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
-    student = relationship("Student", back_populates="messages")
+class Announcement(Base):
+    __tablename__ = "announcements"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)

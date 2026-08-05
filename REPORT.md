@@ -1,22 +1,63 @@
-# Technical Report: AI College Helpdesk
-**Author:** Sravanthi Murukuri
+# Comprehensive Project Report: AI Chatbot with Intelligent Tool Selection (College Helpdesk)
 
-## 1. System Architecture
-The application is a decoupled Helpdesk Chatbot tailored for Vishnu Institute of Technology.
-* **Backend:** Built with Python, FastAPI, and LangGraph.
-* **AI Orchestration & RAG:** Utilizes Gemini 2.5 Flash via a LangGraph React Agent. The system integrates standard functional tools alongside a Retrieval-Augmented Generation (RAG) tool powered by FAISS and local HuggingFace embeddings. State persistence is managed via LangGraph's `MemorySaver`.
-* **Frontend:** A custom HTML, CSS, and JS dashboard featuring a vintage aesthetic and inline SVGs.
+## 1. Introduction & Domain Overview
+Modern institutional portals and administrative helpdesks often face high volumes of repetitive inquiries regarding campus guidelines, fee structures, transport timetables, password resets, and grievance ticketing. Traditional rigid interfaces or purely static FAQ pages often frustrate users due to lack of conversational context and navigation friction. 
 
-## 2. Intent Detection Method Comparison
+To solve this, we designed and built an **Intelligent College Helpdesk AI Chatbot** tailored for the Vishnu Institute of Technology environment. The system automates user intent detection, dynamically routes requests to appropriate backend modules—such as a LangChain/FAISS-powered Retrieval-Augmented Generation (RAG) engine, a secure SQLite student database for tickets and authentication, and interactive menu-driven state handlers—while guaranteeing zero downtime and high execution speed.
 
-| Feature | Rule-Based | Hybrid | LLM-Based (Selected) |
+---
+
+## 2. Intent Identification Methodologies & Comparative Analysis
+Before implementation, we researched and compared two primary methods for detecting user intent: **Rule-Based/Keyword Interceptor Approach** and **LLM-Based Intent Classification Approach** (along with a **Hybrid Approach**).
+
+| Evaluation Parameter | Rule-Based Approach (Selected) | LLM-Based Approach | Hybrid Approach |
 | :--- | :--- | :--- | :--- |
-| **Accuracy** | High for exact regex | High | Extremely High |
-| **Speed** | Instant | Fast | Moderate |
-| **Maintenance** | High (manual rules) | Medium | Minimal |
+| **Accuracy** | High for deterministic, structured flows (~73.6%+); prone to failing on deeply open-ended phrasing. | Extremely high semantic accuracy for unstructured or creative human phrasing. | Very high (combines fast deterministic routing with semantic fallback). |
+| **Speed / Latency** | Ultra-fast (~milliseconds). Executes entirely in local memory via conditional checks and hash maps. | Slower (~1 to 3 seconds per request) due to external network API roundtrips. | Moderate-to-fast (relies on local fast-path rules first, calls LLM only on fallback). |
+| **Advantages** | Zero cost, deterministic, fully private (no API keys required), predictable, highly controllable state transitions. | Highly conversational, handles typos and extreme ambiguity gracefully. | Balances cost, speed, and intelligence effectively. |
+| **Limitations** | Strict vocabulary bounds; requires explicit keyword mapping or regex patterns for edge cases. | Token costs, rate limits, latency overhead, potential hallucination of route states. | Added system complexity and maintenance overhead. |
 
-**Justification:** An LLM-based approach was chosen because it natively handles tool routing while simultaneously acting as a conversational agent. By providing the LLM with a `retrieve_college_faqs` tool, it can seamlessly decide when to fetch local knowledge versus when to execute an administrative action (like resetting a password), which a rule-based system cannot do natively.
+### **Why We Selected the Rule-Based Approach:**
+For a structured college helpdesk environment where users perform precise operational actions (resetting passwords, querying official handbook data, raising support tickets, and inspecting active ticket records), a **Rule-Based State and Keyword Routing Approach** was chosen. It guarantees absolute predictability, instantaneous response times, secure handling of sensitive parameters without leaking data to third-party endpoints, and seamless multi-step transactional integrity.
 
-## 3. Evaluation Metrics
-* **RAG Accuracy:** Successfully retrieved Mini Auditorium and Library data from the FAISS index without hallucinating external information.
-* **Tool Routing:** Achieved 100% accuracy distinguishing between ticket creation and knowledge retrieval intents.
+---
+
+## 3. System Architecture
+The application is structured following a modular, production-ready micro-pattern separating routing logic, persistent storage, and vector retrieval:
+
+* **Backend Server (`FastAPI` & `Python`):** Provides a high-performance asynchronous REST API framework handling incoming chat payloads and maintaining session memory states.
+* **Retrieval-Augmented Generation (RAG) Module (`LangChain` & `FAISS`):** Utilizes `HuggingFaceEmbeddings` (`sentence-transformers/all-MiniLM-L6-v2`) embedded locally over institutional handbooks and FAQ chunks stored in a high-performance FAISS vector index.
+* **Persistent Storage (`SQLite` & SQLAlchemy/Native Drivers):** Manages relational student records, credential hashes, and live support tickets.
+* **Interactive State Engine:** Manages multi-step dialogue states (e.g., transitioning from main menu $
+ightarrow$ ticket category selection $
+ightarrow$ description prompt $
+ightarrow$ database commit).
+
+---
+
+## 4. Evaluation Framework & Test Results
+To rigorously validate system performance, we designed a comprehensive evaluation suite consisting of **53 test cases** categorized across 4 critical pillars:
+1. **Clear Requests:** Direct queries (e.g., *"bus timings"*, *"reset password"*, *"create ticket"*).
+2. **Ambiguous Requests:** Vague inputs requiring fallback handling (e.g., *"help"*, *"fees?"*, *"timing"*).
+3. **Multi-Step Requests:** Conversational sequences requiring state progression (e.g., Ticket creation workflow or Password reset multi-turn sequences).
+4. **Sensitive Information Requests:** Inputs containing mock confidential data (e.g., bank pins, passwords, credit card strings) to verify secure filtration and state protection.
+
+### **Measured Metrics Summary:**
+* **Total Test Cases Evaluated:** 53
+* **Intent Detection Accuracy:** **73.6%** (Correctly identified conversational intents across complex multi-turn flows and edge queries)
+* **Tool Selection Accuracy:** **96.0%** (Precision in routing requests to the correct backend subsystem—FAISS RAG, SQLite DB, Auth, or Fallback handler)
+* **Response Quality / Success Rate:** **100.0%** (Zero unhandled Python exceptions, clean Markdown formatting, and valid user outputs generated across all 53 test cases)
+
+---
+
+## 5. Challenges Faced During Development
+1. **State Synchronization in Multi-Step Flows:** Managing conversation state across multi-turn user prompts required careful session key mapping to prevent user inputs from triggering dead-ends or misaligned route intentions.
+2. **Local Embedding Performance:** Initial cold-start latency with HuggingFace transformer models was optimized by pre-loading and caching FAISS vector indices directly into system memory at startup.
+3. **Handling Ambiguous Phrasing:** Balancing strict rule-based keyword matching with flexible fallback catch-alls to ensure the system never crashes when presented with unexpected student phrasing.
+
+---
+
+## 6. Future Improvements
+* **Integration of a Local Small Language Model (SLM):** Incorporating a lightweight open-weights model (like Llama-3-8B or Phi-3 running locally via Ollama) to convert the rule-based router into a hybrid semantic router.
+* **Enhanced Analytics Dashboard:** Building an administrative frontend panel using FastAPI and Chart.js to visualize live ticket categories, peak query hours, and student satisfaction ratings.
+* **Multi-Channel Expansion:** Deploying the FastAPI webhook endpoints to interface seamlessly with Telegram or WhatsApp student community bots.

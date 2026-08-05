@@ -46,6 +46,12 @@
             overflow: hidden;
             transition: background 0.3s, color 0.3s;
         }
+        .main-layout {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -240,12 +246,31 @@
         }
         .resolve-action-btn:hover { background-color: #218838; }
 
+        .chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .announcement-banner {
+            display: none;
+            background: linear-gradient(135deg, #ff4d4d, #b30000);
+            color: white;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
             background-color: var(--bg-color);
-            height: 100vh;
+            overflow: hidden;
         }
         .chat-header {
             padding: 15px 25px;
@@ -395,92 +420,101 @@
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="profile-card" onclick="openProfilePage()" title="Click to open full profile page">
-            <div class="profile-avatar" id="profile-initials">SM</div>
-            <h3 id="student-name">Student Portal</h3>
-            <p id="student-email">Loading...</p>
-            <div class="ticket-badge" id="active-tickets-badge">Active Tickets: Loading...</div>
+    <div class="main-layout">
+        <div class="sidebar">
+            <div class="profile-card" onclick="openProfilePage()" title="Click to open full profile page">
+                <div class="profile-avatar" id="profile-initials">SM</div>
+                <h3 id="student-name">Student Portal</h3>
+                <p id="student-email">Loading...</p>
+                <div class="ticket-badge" id="active-tickets-badge">Active Tickets: Loading...</div>
+            </div>
+
+            <!-- Live FAQ Search Bar -->
+            <div class="sidebar-search-container">
+                <input type="text" id="faqSearchInput" placeholder="🔍 Search campus FAQs..." oninput="searchFAQs(this.value)">
+                <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+            </div>
+
+            <button onclick="scrollToBottom()">💬 Active Chat</button>
+            <button onclick="startNewChat()">✨ New Chat</button>
+            <button onclick="sendQuickCommand('menu')" class="secondary">🏠 Main Menu</button>
+            <button onclick="sendQuickCommand('create ticket')" class="secondary">🎫 Create Support Ticket</button>
+            <button onclick="openTicketsModal()" class="secondary">📋 Manage My Tickets</button>
+            <button onclick="sendQuickCommand('smart campus outing process')" class="secondary">🚶 Smart Campus Outing</button>
+            <button onclick="sendQuickCommand('facilities')" class="secondary">🏢 Facilities</button>
+            <button onclick="sendQuickCommand('eapcet info')" class="secondary">📊 EAPCET Cutoff Info</button>
+            <button onclick="sendQuickCommand('explore campus clubs & join')" class="secondary">🌟 Explore Clubs</button>
+            <button onclick="toggleTheme()" class="secondary" id="theme-toggle-btn">☀️ Light Mode</button>
+            <button onclick="logout()" class="secondary" style="margin-top: auto; color: #ff6b6b; font-weight: bold;">🚪 Logout</button>
         </div>
 
-        <!-- Live FAQ Search Bar -->
-        <div class="sidebar-search-container">
-            <input type="text" id="faqSearchInput" placeholder="🔍 Search campus FAQs..." oninput="searchFAQs(this.value)">
-            <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+        <!-- Enhanced Modal for Tickets & Comments Thread -->
+        <div class="modal-overlay" id="ticketsModal">
+            <div class="modal-card">
+                <div id="ticketListView">
+                    <h3 style="margin-top:0; color:#ff4d4d; font-size:18px;">Active Support Tickets</h3>
+                    <p style="font-size:12px; color:var(--secondary-text); margin-bottom:15px;">Click a ticket to view conversation history or add comments.</p>
+                    <div id="modalTicketList" style="display: flex; flex-direction: column; gap: 10px;">
+                        <p style="color:#888; text-align:center;">Loading active tickets...</p>
+                    </div>
+                </div>
+
+                <!-- Ticket Thread View (Hidden by default) -->
+                <div id="ticketThreadView" style="display: none;">
+                    <button onclick="backToTicketList()" style="background:var(--secondary-btn); border:none; color:var(--text-color); padding:6px 12px; border-radius:6px; cursor:pointer; margin-bottom:10px;">← Back to Tickets</button>
+                    <h3 id="threadTitle" style="color:#ff4d4d; margin:5px 0; font-size:16px;">Ticket Thread</h3>
+                    <div id="threadMessages" style="background:var(--bg-color); border:1px solid var(--border-color); border-radius:10px; padding:10px; height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="commentInput" placeholder="Type a reply or update..." style="flex:1; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color);">
+                        <button onclick="postComment()" style="background:#ff4d4d; color:white; border:none; padding:0 16px; border-radius:8px; cursor:pointer; font-weight:bold;">Send</button>
+                    </div>
+                </div>
+
+                <button onclick="closeTicketsModal()" style="background:var(--secondary-btn); color:var(--text-color); border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; cursor:pointer; font-weight:600;">Close</button>
+            </div>
         </div>
 
-        <button onclick="scrollToBottom()">💬 Active Chat</button>
-        <button onclick="startNewChat()">✨ New Chat</button>
-        <button onclick="sendQuickCommand('menu')" class="secondary">🏠 Main Menu</button>
-        <button onclick="sendQuickCommand('create ticket')" class="secondary">🎫 Create Support Ticket</button>
-        <button onclick="openTicketsModal()" class="secondary">📋 Manage My Tickets</button>
-        <button onclick="sendQuickCommand('smart campus outing process')" class="secondary">🚶 Smart Campus Outing</button>
-        <button onclick="sendQuickCommand('facilities')" class="secondary">🏢 Facilities</button>
-        <button onclick="sendQuickCommand('eapcet info')" class="secondary">📊 EAPCET Cutoff Info</button>
-        <button onclick="sendQuickCommand('explore campus clubs & join')" class="secondary">🌟 Explore Clubs</button>
-        <button onclick="toggleTheme()" class="secondary" id="theme-toggle-btn">☀️ Light Mode</button>
-        <button onclick="logout()" class="secondary" style="margin-top: auto; color: #ff6b6b; font-weight: bold;">🚪 Logout</button>
-    </div>
+        <div class="chat-wrapper">
+            <!-- Campus Emergency Broadcast Banner -->
+            <div id="announcementBanner" class="announcement-banner">
+                <span id="announcementText">📢 Loading announcement...</span>
+            </div>
 
-    <!-- Enhanced Modal for Tickets & Comments Thread -->
-    <div class="modal-overlay" id="ticketsModal">
-        <div class="modal-card">
-            <div id="ticketListView">
-                <h3 style="margin-top:0; color:#ff4d4d; font-size:18px;">Active Support Tickets</h3>
-                <p style="font-size:12px; color:var(--secondary-text); margin-bottom:15px;">Click a ticket to view conversation history or add comments.</p>
-                <div id="modalTicketList" style="display: flex; flex-direction: column; gap: 10px;">
-                    <p style="color:#888; text-align:center;">Loading active tickets...</p>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="header-brand">
+                        <span class="logo-vit">VIT</span><span class="logo-helpdesk">helpdesk</span>
+                    </div>
+                    <div class="header-actions">
+                        <select id="exportDropdown" class="export-select" onchange="handleExportSelection(this)">
+                            <option value="" disabled selected>📥 Export Chat...</option>
+                            <option value="txt">Export as Text (.txt)</option>
+                            <option value="pdf">Export as PDF</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chat-messages"></div>
+
+                <!-- Suggested Quick Actions Bar -->
+                <div class="suggested-actions">
+                    <button onclick="sendQuickCommand('menu')">🏠 Main Menu</button>
+                    <button onclick="sendQuickCommand('college info')">📚 College Info</button>
+                    <button onclick="sendQuickCommand('my tickets')">🔍 My Tickets</button>
+                    <button onclick="sendQuickCommand('placement statistics')">📈 Placements</button>
+                </div>
+
+                <div class="chat-input-area">
+                    <textarea id="user-input" placeholder="Type your message or select an option..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
+                    <button id="sendBtn" class="send-btn" onclick="sendMessage()" title="Send Message" disabled>
+                        <!-- Send Icon SVG -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
                 </div>
             </div>
-
-            <!-- Ticket Thread View (Hidden by default) -->
-            <div id="ticketThreadView" style="display: none;">
-                <button onclick="backToTicketList()" style="background:var(--secondary-btn); border:none; color:var(--text-color); padding:6px 12px; border-radius:6px; cursor:pointer; margin-bottom:10px;">← Back to Tickets</button>
-                <h3 id="threadTitle" style="color:#ff4d4d; margin:5px 0; font-size:16px;">Ticket Thread</h3>
-                <div id="threadMessages" style="background:var(--bg-color); border:1px solid var(--border-color); border-radius:10px; padding:10px; height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
-                <div style="display:flex; gap:8px;">
-                    <input type="text" id="commentInput" placeholder="Type a reply or update..." style="flex:1; padding:10px; border-radius:8px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--text-color);">
-                    <button onclick="postComment()" style="background:#ff4d4d; color:white; border:none; padding:0 16px; border-radius:8px; cursor:pointer; font-weight:bold;">Send</button>
-                </div>
-            </div>
-
-            <button onclick="closeTicketsModal()" style="background:var(--secondary-btn); color:var(--text-color); border:none; padding:10px; border-radius:10px; width:100%; margin-top:15px; cursor:pointer; font-weight:600;">Close</button>
-        </div>
-    </div>
-
-    <div class="chat-container">
-        <div class="chat-header">
-            <div class="header-brand">
-                <span class="logo-vit">VIT</span><span class="logo-helpdesk">helpdesk</span>
-            </div>
-            <div class="header-actions">
-                <select id="exportDropdown" class="export-select" onchange="handleExportSelection(this)">
-                    <option value="" disabled selected>📥 Export Chat...</option>
-                    <option value="txt">Export as Text (.txt)</option>
-                    <option value="pdf">Export as PDF</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="chat-messages" id="chat-messages"></div>
-
-        <!-- Suggested Quick Actions Bar -->
-        <div class="suggested-actions">
-            <button onclick="sendQuickCommand('menu')">🏠 Main Menu</button>
-            <button onclick="sendQuickCommand('college info')">📚 College Info</button>
-            <button onclick="sendQuickCommand('my tickets')">🔍 My Tickets</button>
-            <button onclick="sendQuickCommand('placement statistics')">📈 Placements</button>
-        </div>
-
-        <div class="chat-input-area">
-            <textarea id="user-input" placeholder="Type your message or select an option..." rows="1" onkeypress="handleKeyPress(event)"></textarea>
-            <button id="sendBtn" class="send-btn" onclick="sendMessage()" title="Send Message" disabled>
-                <!-- Send Icon SVG -->
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </button>
         </div>
     </div>
 
@@ -489,6 +523,18 @@
             const currentTheme = localStorage.getItem('vit_theme') || 'dark';
             const btn = document.getElementById('theme-toggle-btn');
             if(btn) btn.innerText = currentTheme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+
+            // Fetch active emergency broadcast banner
+            fetch('http://127.0.0.1:8000/api/announcements/active')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.active) {
+                        const banner = document.getElementById('announcementBanner');
+                        document.getElementById('announcementText').innerHTML = `<strong>${data.title}:</strong> ${data.message}`;
+                        banner.style.display = 'block';
+                    }
+                })
+                .catch(err => console.error("Error fetching announcements:", err));
         });
 
         function toggleTheme() {

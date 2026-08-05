@@ -1,8 +1,9 @@
 import json
 import os
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import Student, Ticket
+from backend.database import SessionLocal
+from backend.models import Student, Ticket
+from backend.rag_engine import query_rag
 
 user_states = {}
 
@@ -97,6 +98,18 @@ def process_chat_message(message: str, session_id: str) -> str:
         # Fetch student object early for direct database RAG integration
         student = db.query(Student).filter(Student.email == clean_email).first()
 
+        # Handle gratitude / thank you inputs politely
+        if any(word in msg_lower for word in ["thank", "thanks", "thank you", "thx"]):
+            user_states[clean_email] = "main_menu"
+            return "You're very welcome! Let me know if you need help with anything else. Type **'menu'** anytime to see the main options."
+
+        # Handle confirmation / casual acknowledgements (ok, okay, k, bye)
+        if msg_lower in ["ok", "okay", "k", "bye", "goodbye"]:
+            user_states[clean_email] = "main_menu"
+            if msg_lower in ["bye", "goodbye"]:
+                return "Goodbye! Have a great day ahead. Type **'menu'** whenever you need assistance again."
+            return "Got it! Type **'menu'** whenever you want to return to the main options."
+
         # 1. Handle Active Submenu States FIRST
         if current_state == "rag_submenu":
             user_states[clean_email] = "main_menu"
@@ -109,7 +122,7 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "5": "examination", "exam": "examination",
                 "6": "fee", "fee": "fee",
                 "7": "it_support", "it": "it_support",
-                "8": "eapcet", "eamcet": "eamcet", "admission": "eapcet"
+                "8": "eapcet", "eamcet": "eapcet", "admission": "eapcet"
             }
             
             key = mapping.get(msg_lower, "academics")
@@ -338,7 +351,25 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "Type **'menu'** to return to main options."
             )
 
-        # 3. Default Main Menu Handling
+        # 3. LangChain PDF RAG Engine Integration Trigger with Clean Paragraph Layout
+        rag_triggers = [
+            "bus", "timing", "transport", "hostel", "fee", "fees", 
+            "rule", "rules", "handbook", "attendance", "ragging", 
+            "payment", "accommodation", "mess", "cutoff", "bhimavaram",
+            "palakollu", "vedavathi", "vasishta", "exam", "grade"
+        ]
+        
+        if any(kw in msg_lower for kw in rag_triggers):
+            user_states[clean_email] = "main_menu"
+            context = query_rag(message)
+            if context:
+                # Remove artifacts and clean up spacing into smooth, continuous paragraphs
+                cleaned_text = context.replace("", "").strip()
+                paragraphs = [p.replace("\n", " ").strip() for p in cleaned_text.split("\n\n") if p.strip()]
+                formatted_body = "\n\n".join(paragraphs)
+                return f"📄 **Official College Handbook & Guidelines (RAG):**\n\n{formatted_body}\n\nType **'menu'** to return to main options."
+
+        # 4. Default Main Menu Handling
         if current_state == "main_menu":
             if "password" in msg_lower or "reset" in msg_lower or msg_lower == "4":
                 user_states[clean_email] = "reset_pwd_old"

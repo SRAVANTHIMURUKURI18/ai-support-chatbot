@@ -1,13 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import json
 import os
 
-from database import SessionLocal, engine, Base
-from models import Student, Ticket, ChatMessage, TicketComment
-from chatbot import process_chat_message
+from backend.database import SessionLocal, engine, Base
+from backend.models import Student, Ticket, ChatMessage, TicketComment, Announcement
+from backend.chatbot import process_chat_message
+from backend.rag_engine import query_rag
 
 Base.metadata.create_all(bind=engine)
 
@@ -45,6 +47,8 @@ class TicketUpdate(BaseModel):
 class CommentCreate(BaseModel):
     sender: str
     message: str
+
+# --- API ROUTES (Defined BEFORE static mount to prevent 405 errors) ---
 
 @app.post("/api/register")
 def register(req: RegisterRequest):
@@ -94,11 +98,21 @@ def chat(req: ChatRequest):
     db.close()
     return {"response": bot_reply}
 
+@app.get("/api/rag-search")
+def rag_search(query: str):
+    try:
+        context = query_rag(query)
+        if not context:
+            return {"found": False, "answer": "No relevant information found in the official handbook."}
+        return {"found": True, "answer": context}
+    except Exception as e:
+        return {"found": False, "answer": str(e)}
+
 @app.get("/api/search")
 def search_faqs(query: str):
     faq_path = "backend/faq_dataset.json"
     if not os.path.exists(faq_path):
-        faq_path = "faq_dataset.json" # Fallback relative root path check
+        faq_path = "faq_dataset.json"
     
     if not os.path.exists(faq_path):
         return {"results": []}
@@ -116,6 +130,21 @@ def search_faqs(query: str):
                     results.append(item)
                     
     return {"results": results[:10]}
+
+@app.get("/api/announcements/active")
+def get_active_announcement():
+    db = SessionLocal()
+    try:
+        announcement = db.query(Announcement).filter(Announcement.is_active == True).order_by(Announcement.id.desc()).first()
+        if not announcement:
+            return {"active": False}
+        return {
+            "active": True,
+            "title": announcement.title,
+            "message": announcement.message
+        }
+    finally:
+        db.close()
 
 @app.get("/api/chat/history/{email}")
 def get_chat_history(email: str):
@@ -219,3 +248,9 @@ def reset_password(req: PasswordResetRequest):
     db.commit()
     db.close()
     return {"success": True, "message": "Password updated successfully"}
+
+# --- STATIC FILES MOUNT (Placed strictly at the bottom) ---
+if os.path.exists("frontend"):
+    app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+elif os.path.exists("../frontend"):
+    app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
