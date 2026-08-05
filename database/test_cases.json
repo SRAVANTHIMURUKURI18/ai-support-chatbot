@@ -1,0 +1,295 @@
+[
+  {
+    "step": 1,
+    "input": "bus timings",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "hostel fees",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "create ticket",
+    "expected_tool": "ticket_menu",
+    "expected_intent": "creating_ticket_category"
+  },
+  {
+    "step": 1,
+    "input": "my tickets",
+    "expected_tool": "database",
+    "expected_intent": "database_query"
+  },
+  {
+    "step": 1,
+    "input": "reset password",
+    "expected_tool": "auth",
+    "expected_intent": "reset_pwd_old"
+  },
+  {
+    "step": 1,
+    "input": "facilities",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "food",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "placement statistics",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "website",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "outing",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "faculty",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "eamcet info",
+    "expected_tool": "static_faq",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "college info",
+    "expected_tool": "rag_submenu",
+    "expected_intent": "rag_submenu"
+  },
+  {
+    "step": 1,
+    "input": "menu",
+    "expected_tool": "navigation",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "hi",
+    "expected_tool": "navigation",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "help",
+    "expected_tool": "navigation",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "what about this",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "fees?",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "timing",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "where to go",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "issue",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "hello there",
+    "expected_tool": "navigation",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "info",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "transport",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "rules",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "exam",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "sports",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "mess",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "start",
+    "expected_tool": "navigation",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "ok",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "scenario": "Ticket Creation",
+    "steps": [
+      {"input": "create ticket", "expected_tool": "ticket_menu", "expected_intent": "creating_ticket_category"},
+      {"input": "1", "expected_tool": "ticket_category_select", "expected_intent": "creating_ticket_desc"},
+      {"input": "Academic issue in lab computers", "expected_tool": "ticket_db_save", "expected_intent": "main_menu"}
+    ]
+  },
+  {
+    "scenario": "Password Reset",
+    "steps": [
+      {"input": "reset password", "expected_tool": "auth", "expected_intent": "reset_pwd_old"},
+      {"input": "OldPassword123", "expected_tool": "auth_flow_step2", "expected_intent": "reset_pwd_new"},
+      {"input": "NewSecurePassword999", "expected_tool": "auth_flow_finish", "expected_intent": "main_menu"}
+    ]
+  },
+  {
+    "scenario": "RAG Submenu",
+    "steps": [
+      {"input": "college info", "expected_tool": "rag_submenu", "expected_intent": "rag_submenu"},
+      {"input": "2", "expected_tool": "rag_submenu_select", "expected_intent": "main_menu"}
+    ]
+  },
+  {
+    "step": 1,
+    "input": "4",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "5",
+    "expected_tool": "club_flow",
+    "expected_intent": "club_interest"
+  },
+  {
+    "step": 1,
+    "input": "yes",
+    "expected_tool": "club_flow_response",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "hostel room allocation rules",
+    "expected_tool": "rag",
+    "expected_intent": "rag"
+  },
+  {
+    "step": 1,
+    "input": "3",
+    "expected_tool": "database",
+    "expected_intent": "database_query"
+  },
+  {
+    "step": 1,
+    "input": "my password is secret123",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "change password to mybankpin",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "here is my credit card 4111-2222",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "my bank account details",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "identity verification number check",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "private medical record",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "my token is bearer_xyz123",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "secret API key sk-proj-1234",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "login with pin 5678",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  },
+  {
+    "step": 1,
+    "input": "confidential exam leak data",
+    "expected_tool": "fallback",
+    "expected_intent": "main_menu"
+  }
+]
