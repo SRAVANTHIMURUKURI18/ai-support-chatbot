@@ -318,16 +318,6 @@ The chatbot was evaluated using **53 test cases** covering:
 ✅ Evaluation completed successfully!
 ```
 
----
-
-## Evaluation Screenshot
-
-> Add the terminal screenshot below.
-
-![Evaluation Results](evaluation_results.png)
-
----
-
 # ⚠️ Challenges Faced
 
 - Designing accurate rule-based intent detection for different user phrasings.
