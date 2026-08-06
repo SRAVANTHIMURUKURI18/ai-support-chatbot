@@ -8,17 +8,25 @@ To solve this, we designed and built an **Intelligent College Helpdesk AI Chatbo
 ---
 
 ## 2. Intent Identification Methodologies & Comparative Analysis
-Before implementation, we researched and compared two primary methods for detecting user intent: **Rule-Based/Keyword Interceptor Approach** and **LLM-Based Intent Classification Approach** (along with a **Hybrid Approach**).
 
-| Evaluation Parameter | Rule-Based Approach (Selected) | LLM-Based Approach | Hybrid Approach |
+Before implementation, we researched and compared three primary methods for detecting user intent: **Rule-Based Intent Routing**, **LLM-Based Intent Classification**, and a **Hybrid Approach**.
+
+| Evaluation Parameter | Rule-Based Approach | LLM-Based Approach | Hybrid Approach (Selected) |
 | :--- | :--- | :--- | :--- |
-| **Accuracy** | High for deterministic, structured flows (~73.6%+); prone to failing on deeply open-ended phrasing. | Extremely high semantic accuracy for unstructured or creative human phrasing. | Very high (combines fast deterministic routing with semantic fallback). |
-| **Speed / Latency** | Ultra-fast (~milliseconds). Executes entirely in local memory via conditional checks and hash maps. | Slower (~1 to 3 seconds per request) due to external network API roundtrips. | Moderate-to-fast (relies on local fast-path rules first, calls LLM only on fallback). |
-| **Advantages** | Zero cost, deterministic, fully private (no API keys required), predictable, highly controllable state transitions. | Highly conversational, handles typos and extreme ambiguity gracefully. | Balances cost, speed, and intelligence effectively. |
-| **Limitations** | Strict vocabulary bounds; requires explicit keyword mapping or regex patterns for edge cases. | Token costs, rate limits, latency overhead, potential hallucination of route states. | Added system complexity and maintenance overhead. |
+| **Accuracy** | High for predefined and structured workflows; limited for unseen or highly varied user phrasing. | Very high semantic understanding for natural language and open-ended queries. | High by combining deterministic routing for structured operations with semantic retrieval for knowledge-based queries. |
+| **Speed / Latency** | Ultra-fast (milliseconds) since routing is performed using local conditional checks. | Slower due to model inference or external API calls. | Fast for operational workflows while efficiently retrieving relevant information through a local vector database. |
+| **Advantages** | Predictable, secure, cost-free, easy to maintain, and ideal for multi-step workflows. | Understands diverse user expressions, typos, and ambiguous questions. | Combines fast rule-based routing, semantic search through RAG, and database operations for a complete intelligent helpdesk solution. |
+| **Limitations** | Requires predefined rules and keyword mappings; limited flexibility for unseen inputs. | Higher latency, computational cost, and possible hallucinations. | Slightly more complex architecture because it integrates multiple technologies. |
 
-### **Why We Selected the Rule-Based Approach:**
-For a structured college helpdesk environment where users perform precise operational actions (resetting passwords, querying official handbook data, raising support tickets, and inspecting active ticket records), a **Rule-Based State and Keyword Routing Approach** was chosen. It guarantees absolute predictability, instantaneous response times, secure handling of sensitive parameters without leaking data to third-party endpoints, and seamless multi-step transactional integrity.
+### **Why We Selected the Hybrid Approach**
+
+Our college helpdesk is designed to support both **structured student services** and **knowledge-based queries**. Therefore, a **Hybrid Approach** was selected.
+
+- **Rule-Based State Management** is used for deterministic workflows such as login, registration, password reset, ticket creation, ticket status tracking, menu navigation, and multi-step conversations.
+- **Retrieval-Augmented Generation (RAG)** using **FAISS vector search** and **HuggingFace embeddings** is used to answer handbook-related questions such as hostel rules, bus timings, attendance policies, fee information, examination details, and transport guidelines by retrieving the most relevant content from the knowledge base.
+- **Database Integration** using **SQLite** and **SQLAlchemy ORM** is used for dynamic operations such as storing student records, creating and retrieving support tickets, maintaining chat history, managing announcements, and updating user information.
+
+This hybrid architecture combines the **speed and predictability of rule-based workflows**, the **accuracy of semantic information retrieval through RAG**, and the **reliability of database-driven operations**, making it well suited for an AI-powered college helpdesk.
 
 ---
 
