@@ -40,9 +40,39 @@ function sendSuggested(text) {
     sendMessage();
 }
 
+// Automatically trigger the bot greeting upon page load using a distinct initialization flag
+window.addEventListener('DOMContentLoaded', () => {
+    loadAutomaticWelcomeMessage();
+});
+
+async function loadAutomaticWelcomeMessage() {
+    const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email') || 'student@vishnu.edu.in';
+    const loadingId = appendLoading();
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: '__INIT_GREETING__', session_id: studentEmail })
+        });
+
+        if (!response.ok) throw new Error('API Request Failed');
+
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+        appendMessage('ai', data.reply);
+
+    } catch (error) {
+        document.getElementById(loadingId).remove();
+        appendMessage('ai', 'Error: Unable to connect to the server. (Make sure your FastAPI backend is running).');
+    }
+}
+
 async function sendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
+
+    const studentEmail = localStorage.getItem('student_email') || localStorage.getItem('vit_email') || 'student@vishnu.edu.in';
 
     appendMessage('user', text);
     userInput.value = '';
@@ -55,7 +85,7 @@ async function sendMessage() {
         const response = await fetch('http://127.0.0.1:8000/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text, session_id: 'vit_student_session' })
+            body: JSON.stringify({ message: text, session_id: studentEmail })
         });
 
         if (!response.ok) throw new Error('API Request Failed');

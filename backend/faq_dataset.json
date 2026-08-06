@@ -11,6 +11,74 @@
         {
             "question": "How are internal and external marks weighted?",
             "answer": "Typically, internal assessment carries 40 marks (based on mid-term exams, assignments, and quizzes) and semester-end examinations carry 60 marks."
+        },
+        {
+            "question": "What is the grading system and CGPA calculation method?",
+            "answer": "The college follows a 10-point grading system based on Letter Grades (O, A+, A, B+, B, C, P, F). CGPA is calculated as the weighted average of grade points secured across all semesters."
+        },
+        {
+            "question": "How can a student apply for supplementary examinations?",
+            "answer": "Students who have backlogs can apply for supplementary exams by filling out the form via the examination portal and paying the required fee at the fee counter before the specified deadline."
+        },
+        {
+            "question": "What are the rules regarding revaluation and recounting of answer scripts?",
+            "answer": "Students can apply for recounting or revaluation of their semester-end answer scripts within one week of the result declaration by paying the prescribed fee per subject through the exam cell."
+        },
+        {
+            "question": "What materials are provided on vishnulearning.com?",
+            "answer": "Vishnulearning.com provides semester study materials, lecture notes, previous question papers, PDF modules, laboratory manuals, assignments, and online quiz links for all engineering branches."
+        },
+        {
+            "question": "Are there mandatory mini-projects and internships for engineering students?",
+            "answer": "Yes, students must complete at least two industrial internships and a comprehensive major capstone project during their third and fourth years as part of the curriculum requirements."
+        },
+        {
+            "question": "How do I contact my department head or academic mentor?",
+            "answer": "Every student is assigned a faculty mentor for academic and personal guidance. You can meet your mentor during designated mentoring hours or contact your department HOD at their respective office chambers."
+        },
+        {
+            "question": "What are the guidelines for submitting lab records and assignments?",
+            "answer": "Lab records must be completed, checked, and signed by the respective faculty member before the commencement of internal practical examinations. Late submissions may lead to a deduction of internal marks."
+        },
+        {
+            "question": "What are the core engineering branches offered in B.Tech?",
+            "answer": "The core undergraduate B.Tech engineering branches include Computer Science and Engineering (CSE), Information Technology (IT), Artificial Intelligence & Data Science (AI & DS), Artificial Intelligence & Machine Learning (AI & ML), Electronics and Communication Engineering (ECE), Electrical and Electronics Engineering (EEE), Mechanical Engineering (ME), and Civil Engineering (CE)."
+        },
+        {
+            "question": "What are the guidelines for class tests and continuous evaluation?",
+            "answer": "Continuous internal evaluation consists of two mid-term examinations per semester, online quizzes, and regular assignments. The best of the two mid-term marks with weightage considerations is counted toward internal scores."
+        },
+        {
+            "question": "Are remedial classes conducted for academically weak students?",
+            "answer": "Yes, individual departments organize remedial classes and peer-assisted tutorial sessions for students who require extra academic help following mid-term results."
+        },
+        {
+            "question": "How are project batches allocated for final-year capstone projects?",
+            "answer": "Final-year project batches comprising 3 to 4 students are formed under the guidance of a faculty project coordinator, aligning with industry problem statements or cutting-edge research domains."
+        },
+        {
+            "question": "What is the procedure for obtaining a medium of instruction certificate?",
+            "answer": "Students can apply for a Medium of Instruction certificate through the academic section by submitting a written request endorsed by their respective HOD along with student ID proofs."
+        },
+        {
+            "question": "What are the guidelines for taking professional online certification courses during semesters?",
+            "answer": "Students are encouraged to complete credit-transfer online courses via platforms like NPTEL, Coursera, or edX, which can be mapped into their cumulative academic transcript upon prior approval from the academic dean."
+        },
+        {
+            "question": "How does the college handle student grievances related to internal assessment grading?",
+            "answer": "If a student finds discrepancies in internal assessment marks, they can file a formal representation with the course coordinator and department examination cell within three days of publication."
+        },
+        {
+            "question": "What rules govern industrial tour permissions and safety guidelines?",
+            "answer": "Industrial visits require prior written permission from the Principal, parent consent letters for every participating student, and accompaniment by authorized faculty members."
+        },
+        {
+            "question": "Are there specialized honors or minor degree options available in the curriculum?",
+            "answer": "Yes, high-performing students meeting specific CGPA criteria can opt for additional honors degrees in their core branch or minor degrees in emerging technologies like cybersecurity or blockchain."
+        },
+        {
+            "question": "What is the protocol for obtaining official transfer or migration certificates?",
+            "answer": "Transfer certificates (TC) and migration documents are issued upon course completion or discontinuation after clearing all hostel, library, and institutional financial dues."
         }
     ],
     "hostel": [
@@ -21,6 +89,78 @@
         {
             "question": "How do hostel students apply for outings?",
             "answer": "Hostel students can apply for general or local outings through the Smart Campus app by specifying dates, reasons, and in/out times. This requires parent, HOD, and warden approvals followed by security scanning."
+        },
+        {
+            "question": "What are the hostel entry and curfew timings for students?",
+            "answer": "All hostellers must report back to their respective hostels by 7:30 PM on regular weekdays. Unauthorized late entry without prior warden permission invokes disciplinary actions."
+        },
+        {
+            "question": "Can hostellers order food from outside or online delivery apps?",
+            "answer": "Online food deliveries are permitted only up to the main campus security gate during designated evening hours under approved Smart Campus app guidelines."
+        },
+        {
+            "question": "What laundry and washing facilities are provided in the hostels?",
+            "answer": "Automated washing machines and designated drying areas are available in every hostel block. Commercial laundry service options are also available near the shopping complex."
+        },
+        {
+            "question": "How are room allocations and hostel fee payments handled?",
+            "answer": "Room allocation is managed by the chief warden office based on academic years. Hostel fee payments must be cleared annually at the scholarship and fee counter."
+        },
+        {
+            "question": "What medical support is available for hostel residents during emergencies?",
+            "answer": "A 24/7 campus health center with an resident doctor and ambulance service is available to handle medical emergencies for any student or hosteller instantly."
+        },
+        {
+            "question": "Are electrical appliances like iron boxes or kettles allowed in hostel rooms?",
+            "answer": "Heavy electrical heating appliances, immersion rods, and iron boxes are strictly prohibited inside hostel rooms for safety and fire prevention reasons."
+        },
+        {
+            "question": "What recreational facilities are available inside the hostel zones?",
+            "answer": "Hostel zones feature common television rooms, indoor game boards (carroms, chess, table tennis), reading spaces, and adjacent outdoor badminton courts."
+        },
+        {
+            "question": "How can a student raise a maintenance complaint regarding plumbing or electricity in their room?",
+            "answer": "Students can log maintenance complaints via the Smart Campus maintenance portal or register them directly at the hostel office for prompt resolution by the technical staff."
+        },
+        {
+            "question": "What are the room configurations available in campus hostels?",
+            "answer": "Hostel blocks offer both AC and Non-AC room configurations on double or triple-sharing bases with attached washrooms and study balconies."
+        },
+        {
+            "question": "Are guests or parents allowed to stay in student hostel rooms?",
+            "answer": "Unauthorized outsiders or guests are strictly prohibited from staying overnight in hostel rooms. Parents visiting students can utilize the campus guest house facilities upon prior booking."
+        },
+        {
+            "question": "What security protocols are enforced across hostel gates?",
+            "answer": "Hostel premises are protected by 24/7 biometric access gates, dedicated security guards, and extensive CCTV surveillance networks."
+        },
+        {
+            "question": "How are room change requests handled during the academic year?",
+            "answer": "Room change requests are generally discouraged once allotted, but genuine medical or administrative reasons can be submitted via an application to the chief warden."
+        },
+        {
+            "question": "Is internet Wi-Fi bandwidth restricted or unlimited in hostels?",
+            "answer": "High-speed campus Wi-Fi is accessible across all hostel rooms, though bandwidth management protocols apply during peak academic hours."
+        },
+        {
+            "question": "What are the rules regarding student possession of personal vehicles in hostels?",
+            "answer": "Hostel residents are generally not permitted to park or use personal motorized motorbikes or cars inside hostel blocks unless special parking authorization is granted by the chief warden."
+        },
+        {
+            "question": "How are festive celebrations and cultural events organized inside hostel premises?",
+            "answer": "Hostel festival celebrations require prior written approval from the resident warden, and events must conclude within designated time limits maintaining peaceful campus order."
+        },
+        {
+            "question": "What disciplinary measures are taken for ragging or harassment inside hostels?",
+            "answer": "The institution maintains a zero-tolerance policy toward ragging. Any involvement leads to immediate suspension, police reporting, and severe legal actions under anti-ragging laws."
+        },
+        {
+            "question": "Are study quiet hours strictly enforced in hostel accommodation areas?",
+            "answer": "Yes, designated quiet hours are enforced every night starting from 10:00 PM to ensure all students can study and rest without disturbance."
+        },
+        {
+            "question": "What is the protocol for handling lost hostel room keys or smart access cards?",
+            "answer": "Lost keys or smart access cards must be reported immediately to the hostel office so that replacement locks can be fitted or cards reissued at a nominal administrative fee."
         }
     ],
     "placements": [
@@ -31,36 +171,756 @@
         {
             "question": "Which top companies recruit from the college?",
             "answer": "Top recruiters include major multinational technology and service corporations such as Infosys, TCS, Cognizant, Deloitte, Tech Mahindra, and numerous product-based companies."
+        },
+        {
+            "question": "What training programs are conducted for placement preparation?",
+            "answer": "The Training and Placement Cell organizes rigorous coding bootcamps, mock interviews, aptitude training sessions, technical workshops, and communication skill enhancement classes starting from the second year."
+        },
+        {
+            "question": "What is the role of vedic.dev in student placements?",
+            "answer": "Vedic.dev provides detailed student profiles for placements, mock interview performance records, resume repositories, and direct technical guidance from corporate trainers."
+        },
+        {
+            "question": "What are the minimum CGPA criteria required to sit for campus drives?",
+            "answer": "Most mass recruiters require a minimum of 6.0 CGPA with no active backlogs, while premium product-based companies often set criteria starting from 7.0 or 7.5 CGPA."
+        },
+        {
+            "question": "Does the college offer support for Dream and Super Dream job offers?",
+            "answer": "Yes, students securing standard job offers are permitted to participate in subsequent 'Dream' and 'Super Dream' drives matching higher salary thresholds as per placement policies."
+        },
+        {
+            "question": "Who is the primary point of contact for placement-related queries?",
+            "answer": "Students can contact the Training & Placement Office (TPO) located in the administrative building or reach out to their respective departmental placement coordinators."
+        },
+        {
+            "question": "Are pre-placement talks (PPT) mandatory for registered students?",
+            "answer": "Yes, attending company pre-placement talks is compulsory for all registered candidates to understand role expectations, compensation packages, and work locations."
+        },
+        {
+            "question": "What coding platforms are utilized for student practice and assessments?",
+            "answer": "Students practice regularly using platforms like HackerRank, LeetCode, HackerEarth, and CodeChef supported by internal coding portals managed by the department."
+        },
+        {
+            "question": "How are internship-cum-placement offers processed?",
+            "answer": "Students receiving internship offers during their final year complete their corporate internships with stipend support, which subsequently convert into full-time employment roles upon successful evaluation."
+        },
+        {
+            "question": "What is the highest salary package offered during recent campus placement drives?",
+            "answer": "The highest salary package offered during recent recruitment cycles reached up to 22.58 LPA, with competitive average median packages secured across core and IT sectors."
+        },
+        {
+            "question": "Are resume-building workshops conducted prior to recruitment drives?",
+            "answer": "Yes, specialized resume-building seminars and LinkedIn optimization sessions are conducted by the placement cell to ensure students present professional profiles."
+        },
+        {
+            "question": "What guidelines govern student behavior during company placement drives?",
+            "answer": "Registered students must maintain formal dress code, punctuality, and professional decorum during all recruitment tests, group discussions, and personal interviews."
+        },
+        {
+            "question": "Can students with active backlogs register for company placement interviews?",
+            "answer": "Eligibility depends entirely on individual company guidelines; mass recruiters sometimes allow backlog clearance prior to joining, whereas product companies typically require zero active backlogs."
+        },
+        {
+            "question": "How does the TPO handle bulk offers and multi-company selections?",
+            "answer": "The institute operates under a clear 'Dream Offer' policy enabling students who secure standard placement offers to upgrade to higher-paying dream tiers in subsequent drives."
+        },
+        {
+            "question": "What online assessment proctoring tools are typically used during campus hiring drives?",
+            "answer": "Online recruitment tests utilize secure proctoring environments like Mettl, HackerRank, and HireMee equipped with AI-based face and tab-switch tracking."
+        },
+        {
+            "question": "Are alumni mentoring sessions organized to guide students on cracking product-based company interviews?",
+            "answer": "Yes, successful alumni currently working at FAANG and top product firms regularly conduct interactive webinars and technical interview roadmap sessions."
+        },
+        {
+            "question": "How does the placement cell assist students with core engineering roles?",
+            "answer": "The TPO coordinates specialized recruitment drives with core engineering manufacturers, automobile giants, and VLSI design firms alongside software corporations."
+        },
+        {
+            "question": "What documentation must students carry during corporate interview rounds?",
+            "answer": "Candidates must carry multiple hard copies of their updated resumes, passport-size photographs, government-issued photo IDs, and printed academic grade transcripts."
+        },
+        {
+            "question": "What is the policy regarding job offer rejections or backing out after selection?",
+            "answer": "Once a student formally accepts a job offer through the campus placement cell, backing out without valid justification can lead to debarment from subsequent institutional placement opportunities."
         }
     ],
     "library": [
         {
             "question": "What are the library timings and resources?",
             "answer": "The central library and digital library are open from 8:00 AM to 8:00 PM on working days. They feature an extensive collection of textbooks, reference volumes, international journals, and high-speed digital systems."
+        },
+        {
+            "question": "How many books can a student borrow at a time and for how long?",
+            "answer": "Undergraduate students can borrow up to 3 books concurrently for a standard duration of 15 days, with options for renewal if there are no pending reservations."
+        },
+        {
+            "question": "What is the penalty for late return of library books?",
+            "answer": "A nominal fine of ₹1 per day is charged for books returned after the due date. The fine increases slightly for prolonged overdue periods."
+        },
+        {
+            "question": "Is digital library access available outside physical campus premises?",
+            "answer": "Yes, students can access subscribed e-journals, IEEE publications, and digital e-books remotely using their college credentials through the campus VPN and digital library portal."
+        },
+        {
+            "question": "Are there silent reading halls and group discussion spaces available?",
+            "answer": "The library features dedicated silent study zones for individual reading as well as collaborative group discussion rooms for project teamwork."
+        },
+        {
+            "question": "How can students search for specific book titles or authors quickly?",
+            "answer": "Students can use the computerized OPAC (Online Public Access Catalog) terminals installed near the entrance of the central library to locate book shelf numbers instantly."
+        },
+        {
+            "question": "Can students bring personal laptops and study materials into the library?",
+            "answer": "Yes, personal laptops, notebooks, and reference guides are permitted inside the reading halls after signing in at the property counter."
+        },
+        {
+            "question": "What facilities are available for photocopying and printing in the library?",
+            "answer": "A dedicated reprographic and print center is located near the library lobby to provide affordable photocopying, document printing, and scanning services."
+        },
+        {
+            "question": "Are newspapers and competitive exam magazines available?",
+            "answer": "Yes, a wide assortment of daily national newspapers, regional publications, employment news, and competitive exam monthly magazines are displayed daily."
+        },
+        {
+            "question": "What is the procedure for obtaining a library membership card?",
+            "answer": "Library membership is activated automatically upon admission and fee clearance using the smart student ID barcode card issued during registration."
+        },
+        {
+            "question": "What electronic subscription databases are available in the digital library?",
+            "answer": "The digital library provides access to prominent international databases including IEEE Xplore, DELNET, Elsevier ScienceDirect, and ASME e-journals."
+        },
+        {
+            "question": "Are book bank facilities available for economically backward students?",
+            "answer": "Yes, a dedicated book bank scheme operates through the central library to issue complete semester textbook sets to eligible scholarship holders."
+        },
+        {
+            "question": "Can rare books or reference volumes be issued for home reading?",
+            "answer": "Reference volumes, dictionaries, and rare manuscripts are strictly restricted to reading rooms and cannot be checked out for home study."
+        },
+        {
+            "question": "What happens if a library book is lost or damaged by a student?",
+            "answer": "If a book is lost or damaged, the student must either replace it with a new copy of the same edition or pay the double replacement cost along with processing penalties."
+        },
+        {
+            "question": "Are mobile phones permitted inside library reading zones?",
+            "answer": "Mobile phones must be kept on silent mode inside all library reading areas to maintain a quiet academic atmosphere."
+        },
+        {
+            "question": "Are library hours extended during semester-end examination preparation weeks?",
+            "answer": "Yes, central reading halls and digital library sections remain open for extended evening hours leading up to semester-end examinations."
+        },
+        {
+            "question": "How can students recommend new book titles for library acquisition?",
+            "answer": "Students can submit formal book requisition forms endorsed by their course faculty or department HOD directly at the central library circulation desk."
+        },
+        {
+            "question": "Is luggage and bag storage available at the library entrance?",
+            "answer": "Personal bags, backpacks, and personal textbooks must be deposited securely at the designated property counter before entering library reading halls."
+        },
+        {
+            "question": "Are quiet individual carrels provided for research scholars and final-year students?",
+            "answer": "Dedicated study carrels and individual seating desks are available in the upper research section for final-year project teams and post-graduate scholars."
+        },
+        {
+            "question": "How are overdue library books tracked and notified to students?",
+            "answer": "Automated email alerts and portal notifications are dispatched periodically to remind students about upcoming due dates and pending overdue fines."
         }
     ],
     "examination": [
         {
             "question": "Where can I check my semester examination results?",
             "answer": "Semester examination results can be officially checked through the dedicated results portal at vishnu.ac.results."
+        },
+        {
+            "question": "What is the procedure for filling out semester exam application forms?",
+            "answer": "Students must verify their course registration, pay the semester examination fees via the fee counter before the deadline, and submit the signed application online or at the exam cell."
+        },
+        {
+            "question": "What items are strictly prohibited inside the examination hall?",
+            "answer": "Smartphones, smartwatches, programmable calculators, bits of paper, and unauthorized electronic gadgets are strictly banned inside examination halls."
+        },
+        {
+            "question": "What documents must a student carry to every examination session?",
+            "answer": "Students must carry their valid college Identity Card and the official Semester Hall Ticket bearing the invigilator's sign and seal to every exam."
+        },
+        {
+            "question": "What action is taken if a student is caught engaging in malpractice?",
+            "answer": "Strict disciplinary action, including cancellation of the entire semester exams and suspension, is enforced under university anti-malpractice regulations."
+        },
+        {
+            "question": "How are mid-term exam schedules and syllabus announcements communicated?",
+            "answer": "Mid-term exam circulars, timetable schedules, and syllabus portions are posted on department notice boards and official college web portals well in advance."
+        },
+        {
+            "question": "Can a student request a duplicate hall ticket if the original is lost?",
+            "answer": "Yes, a duplicate hall ticket can be obtained by submitting a formal request letter endorsed by the HOD along with a small processing fee at the exam branch."
+        },
+        {
+            "question": "What is the procedure for name or detail corrections on grade memos?",
+            "answer": "Students must report discrepancies on grade cards immediately to the academic section with supporting 10th-grade certificate proofs for official rectification."
+        },
+        {
+            "question": "Are there condonation rules for students with low attendance facing exam debarment?",
+            "answer": "Condonation is granted only under medical emergencies with valid hospital certificates and payment of a condonation fine, provided attendance is above the absolute minimum threshold."
+        },
+        {
+            "question": "When are consolidated marks memos (CMM) and provisional certificates issued?",
+            "answer": "CMM and provisional degree certificates are generally issued by the examination branch within a few weeks after the final semester results are formally declared."
+        },
+        {
+            "question": "What is the grading policy for practical laboratory examinations?",
+            "answer": "Practical examinations are evaluated jointly by internal examiners and external examiners appointed by the university based on record work, viva voce, and experimentation performance."
+        },
+        {
+            "question": "How can backlog exams be cleared if a student fails a course?",
+            "answer": "Backlog papers can be cleared during regular semester-end exam sessions or special supplementary examination windows conducted during academic breaks."
+        },
+        {
+            "question": "What is the rule regarding Grace Marks for borderline degree clearances?",
+            "answer": "University regulations permit limited grace marks for graduating students who fail by minimal margins in a single subject, subject to academic council approval."
+        },
+        {
+            "question": "Are grade sheets dispatched via post or collected physically?",
+            "answer": "Semester grade sheets and consolidated memos must be collected physically from department offices or the examination branch following official notification."
+        },
+        {
+            "question": "Can answer scripts be photocopied during revaluation requests?",
+            "answer": "Under specific university guidelines, students applying for revaluation can request a scanned copy of their evaluated answer booklet upon paying nominal administrative fees."
+        },
+        {
+            "question": "What is the policy for students arriving late to examination sessions?",
+            "answer": "Students arriving more than 30 minutes past the commencement of an examination session are generally barred from entering the examination hall."
+        },
+        {
+            "question": "How are question papers verified and distributed on exam days?",
+            "answer": "Exam papers are securely delivered to exam halls in sealed packets, opened in front of candidates 5 minutes prior to test timing to ensure complete transparency."
+        },
+        {
+            "question": "Are scribe facilities available for physically challenged students during exams?",
+            "answer": "Yes, authorized scribe assistance and extra writing time allocations are provided for eligible differently-abled candidates upon prior approval from the controller of examinations."
+        },
+        {
+            "question": "What happens if a student falls seriously ill during a semester exam session?",
+            "answer": "Immediate first-aid and transport to the campus health center are provided, followed by provisions for medical makeup exams if validated by official hospital documentation."
+        },
+        {
+            "question": "How are convocation degree certificates distributed after graduation?",
+            "answer": "Original degree certificates are awarded during the annual institutional convocation ceremony or dispatched securely via registered post upon request."
         }
     ],
     "fee": [
         {
             "question": "Where can I check fee-related details and student profiles?",
             "answer": "The fee counter is located at A-block for entire semester fees and value-added fees, while hostel fees are to be paid at the scholarship department. Student fee dues, payment receipts, attendance records, and general profile details can also be accessed via the official portal at vishnu.ac.in."
+        },
+        {
+            "question": "What are the accepted payment modes for college and tuition fees?",
+            "answer": "Tuition and hostel fees can be paid via online net banking, UPI, debit/credit cards through the student portal, or by demand drafts drawn in favor of the institution."
+        },
+        {
+            "question": "How can students collect fee payment receipts for tax or scholarship purposes?",
+            "answer": "Official fee receipts can be downloaded instantly from the student self-service portal on vishnu.ac.in or collected physically from the A-block accounts office."
+        },
+        {
+            "question": "Are there penalties for paying semester fees after the due date?",
+            "answer": "Yes, late payment fees are levied on balances cleared after the final announced deadline unless special extension approval is obtained from the principal."
+        },
+        {
+            "question": "How are fee reimbursements and government scholarship credits processed?",
+            "answer": "Government scholarship funds and fee reimbursements are credited directly into the student or college bank accounts, and details are updated via the scholarship department."
+        },
+        {
+            "question": "Whom should I contact regarding fee discrepancies or pending dues?",
+            "answer": "For any discrepancies concerning ledger balances or fee receipts, students should visit the A-block accounts counter or contact the finance department."
+        },
+        {
+            "question": "Can college fees be paid in multiple installments?",
+            "answer": "Installment options are generally not permitted unless approved under special financial hardship cases by the management upon formal written application."
+        },
+        {
+            "question": "What additional fees are collected during annual registration?",
+            "answer": "Additional fees include university registration charges, library fees, sports fees, laboratory maintenance fees, and insurance as per institutional guidelines."
+        },
+        {
+            "question": "How do students clear hostel caution deposits upon course completion?",
+            "answer": "Caution deposits are refunded via bank transfer after deducting any pending breakage or damage dues upon submission of the final 'no dues' clearance certificate."
+        },
+        {
+            "question": "Where is the scholarship section office located for fee concessions?",
+            "answer": "The scholarship section office is situated inside the main administrative building block to assist students with category-based fee concessions and documentation."
+        },
+        {
+            "question": "Are there any fee concessions for top-ranking merit students?",
+            "answer": "Yes, institutional merit scholarships and fee waivers are awarded annually to top-performing academic rankers across individual engineering branches."
+        },
+        {
+            "question": "What is the procedure for claiming transport fee refunds if bus services are discontinued?",
+            "answer": "Transport fee refunds require submitting a formal cancellation application endorsed by the transport in-charge before the start of the academic quarter."
+        },
+        {
+            "question": "How are caution deposits handled if a student takes a temporary academic break?",
+            "answer": "Caution deposits remain securely held by the accounts department during approved academic suspension or semester drop periods until formal course resumption."
+        },
+        {
+            "question": "Can fees be paid using education loans sanctioned by nationalized banks?",
+            "answer": "Yes, institutional accounts accept direct bank disbursements and RTGS/NEFT transfers from sanctioned student education loans."
+        },
+        {
+            "question": "Are fee payment reminders sent electronically to registered student contacts?",
+            "answer": "Automated fee due notifications and receipt generation updates are dispatched via the official college portal messaging service."
+        },
+        {
+            "question": "What is the procedure for obtaining a fee structure certificate for visa or loan processing?",
+            "answer": "Students can apply for an official fee structure certificate at the A-block accounts office by presenting their college identity card and stating the purpose of the document."
+        },
+        {
+            "question": "Are online gateway convenience charges refunded during fee transactions?",
+            "answer": "Online payment gateway charges and transaction fees levied by third-party financial aggregators are non-refundable as per banking policy guidelines."
+        },
+        {
+            "question": "How are fee refunds calculated in case of student withdrawal during the first year?",
+            "answer": "Fee refunds for student admissions withdrawals are processed strictly according to AICTE and affiliating university refund guidelines and deadlines."
+        },
+        {
+            "question": "Can miscellaneous laboratory breakage fees be cleared online?",
+            "answer": "Miscellaneous lab breakage charges can be cleared either through the online student self-service portal or directly at the accounts counter during semester clearance."
+        },
+        {
+            "question": "What is the contact window timing for the A-block accounts and fee counter?",
+            "answer": "The fee and accounts counter at A-block is open on all working days from 9:30 AM to 4:30 PM, with a lunch break between 1:00 PM and 2:00 PM."
         }
     ],
     "it_support": [
         {
             "question": "How do I get technical or Wi-Fi support on campus?",
             "answer": "For IT, network, or portal login assistance, you can raise an online support ticket using option 1 in the chatbot or contact the Cyber Zone and IT Helpdesk cell directly."
+        },
+        {
+            "question": "What is the procedure to configure college Wi-Fi on personal mobile devices?",
+            "answer": "Students can register their device MAC address through the IT network portal and configure the secure campus Wi-Fi network using their unique student credentials."
+        },
+        {
+            "question": "How do I reset my portal password if I get locked out?",
+            "answer": "You can reset your portal password by selecting option 4 in the chatbot interface, entering your current credentials, and setting a secure new password."
+        },
+        {
+            "question": "What should I do if my student portal login credentials stop working?",
+            "answer": "If your portal login fails repeatedly, raise an IT support ticket or visit the Cyber Zone lab with your ID card for manual credential verification."
+        },
+        {
+            "question": "Are computer labs accessible to students outside regular class hours?",
+            "answer": "Yes, designated high-speed computer labs and the Cyber Zone remain open during evening hours for project work and online coding practice."
+        },
+        {
+            "question": "How can students report faulty projectors or computer systems in classrooms?",
+            "answer": "Faulty classroom hardware can be reported immediately to the department system administrator or logged through the IT helpdesk ticketing portal."
+        },
+        {
+            "question": "Is software installation support provided for student laptops?",
+            "answer": "The IT support team assists students with installing licensed academic software, compilers, and development tools required for coursework."
+        },
+        {
+            "question": "What internet speed and bandwidth limits are provided on campus?",
+            "answer": "High-speed optical fiber connectivity powers the campus network, providing seamless internet access across all academic blocks and labs."
+        },
+        {
+            "question": "Are USB drives and external storage devices permitted in computer labs?",
+            "answer": "External USB storage devices are subject to security scanning in labs to prevent malware transmission across the institutional network."
+        },
+        {
+            "question": "Who manages the official institutional web portals and email services?",
+            "answer": "The central IT infrastructure and network administration team manage student email accounts, portal security, and server uptime."
+        },
+        {
+            "question": "How can students retrieve forgotten institutional email passwords?",
+            "answer": "Institutional email password resets can be requested by visiting the central Cyber Zone IT office with valid student identification credentials."
+        },
+        {
+            "question": "Are VPN services provided for accessing college digital assets remotely?",
+            "answer": "Yes, secure VPN profiles are provided for authorized students and researchers to access internal journals, library systems, and software repositories off-campus."
+        },
+        {
+            "question": "What security software is mandated on student laptops connecting to campus Wi-Fi?",
+            "answer": "Student laptops connecting to the institutional network must have updated antivirus definitions and active firewall protection."
+        },
+        {
+            "question": "How are network downtime announcements communicated to students?",
+            "answer": "Scheduled server maintenance or network downtime notifications are broadcast via student web portals and official institutional mailing lists."
+        },
+        {
+            "question": "Can students request specialized server configurations for final-year projects?",
+            "answer": "Specialized cloud or local server allocations for machine learning and heavy computational projects can be requested through departmental system administrators."
+        },
+        {
+            "question": "What hardware troubleshooting support is available for student-owned laptops on campus?",
+            "answer": "The IT helpdesk offers basic network diagnostic assistance and software troubleshooting support, though physical hardware repairs remain the student's responsibility."
+        },
+        {
+            "question": "Are printing and scanning kiosks available inside the Cyber Zone computer lab?",
+            "answer": "Yes, high-speed network printers and document scanners are accessible to students inside the Cyber Zone facility for academic printing needs."
+        },
+        {
+            "question": "How are student IT support tickets tracked from creation to resolution?",
+            "answer": "Students can track the real-time status of their logged technical complaints using the active ticket tracking dashboard integrated within the helpdesk portal."
+        },
+        {
+            "question": "Are wireless printing options available for students across campus blocks?",
+            "answer": "Wireless printing is restricted to designated library and Cyber Zone printing stations linked directly to authenticated institutional user accounts."
+        },
+        {
+            "question": "What safety firewall policies govern internet browsing on campus networks?",
+            "answer": "Campus network firewalls automatically block malicious websites, peer-to-peer torrent sharing, and unauthorized proxy bypass tools to ensure network security."
+        }
+    ],
+    "facilities": [
+        {
+            "question": "What recreational and sports facilities are available on campus?",
+            "answer": "Campus facilities include a full-size cricket ground, football field, tennis courts, squash court, indoor gymnasium, swimming pool, and an open-air movie theatre."
+        },
+        {
+            "question": "Where is the campus temple located for spiritual well-being?",
+            "answer": "A peaceful campus temple providing calm and divine vibes is situated near the central square, open for students and staff."
+        },
+        {
+            "question": "What relaxation spots and parks are available within the campus?",
+            "answer": "Students can relax at the peaceful landscaped parks, the popular Tea Leaf spot, and central gathering plazas during breaks."
+        },
+        {
+            "question": "Is there a gymnasium and fitness center available for students?",
+            "answer": "Yes, a fully equipped modern gym and fitness center is located near the Cyber Zone, accessible for both day scholars and hostellers."
+        },
+        {
+            "question": "Are banking and ATM facilities available inside the campus?",
+            "answer": "Multiple nationalized bank ATMs and a campus branch are situated near the main entrance for convenient financial transactions."
+        },
+        {
+            "question": "What medical and pharmacy facilities operate within the premises?",
+            "answer": "A 24/7 medical health center with an on-duty physician and an attached pharmacy store is available to handle health needs and emergencies."
+        },
+        {
+            "question": "How is campus security and safety maintained across blocks?",
+            "answer": "Round-the-clock security personnel, perimeter fencing, and comprehensive CCTV surveillance cover all hostel zones, gates, and academic corridors."
+        },
+        {
+            "question": "Is transport parking available for students using bikes or bicycles?",
+            "answer": "Dedicated two-wheeler parking stands are established near the campus entrance gates under security observation."
+        },
+        {
+            "question": "What stationery and general store facilities are available?",
+            "answer": "Campus stores provide notebooks, textbooks, drawing instruments, pen drives, and general daily utility items."
+        },
+        {
+            "question": "Are seminar halls and auditorium facilities available for student events?",
+            "answer": "Multiple air-conditioned seminar halls and a large mini-auditorium are available for hosting technical symposiums, workshops, and cultural fests."
+        },
+        {
+            "question": "What transportation bus services are operated for day scholars?",
+            "answer": "The institution operates a comprehensive fleet of buses covering Bhimavaram town and surrounding rural and urban districts for convenient student commute."
+        },
+        {
+            "question": "Are ramp and elevator accessibility features available for differently-abled students?",
+            "answer": "Yes, barrier-free ramps, elevators, and dedicated washroom facilities are integrated across all academic blocks to support differently-abled individuals."
+        },
+        {
+            "question": "Is there a guest house facility for visiting parents and external experts?",
+            "answer": "A well-maintained air-conditioned guest house is available on campus to accommodate visiting university examiners, guest lecturers, and student parents."
+        },
+        {
+            "question": "What power backup systems prevent disruptions during academic hours?",
+            "answer": "High-capacity diesel generators and uninterrupted power supply (UPS) systems maintain seamless electricity across labs, classrooms, and hostels."
+        },
+        {
+            "question": "How is campus waste management and environmental sustainability maintained?",
+            "answer": "Green campus initiatives include dedicated solid waste segregation, sewage treatment plants, solar power installations, and extensive tree plantation drives."
+        },
+        {
+            "question": "Are indoor badminton and table tennis courts accessible to all students?",
+            "answer": "Yes, dedicated indoor sports complexes equipped with wooden flooring badminton courts and table tennis setups are available near the student activity center."
+        },
+        {
+            "question": "Where is the lost and found property desk located on campus?",
+            "answer": "The central administrative office maintains a lost and found registry where students can report or collect misplaced belongings."
+        },
+        {
+            "question": "Are fire safety extinguishers and emergency exits installed across all buildings?",
+            "answer": "All academic blocks, laboratories, and hostel corridors are fully equipped with certified fire extinguishers, hose reels, and clearly marked emergency exit routes."
+        },
+        {
+            "question": "Is there a post office or courier service counter operating within campus limits?",
+            "answer": "Postal drop boxes and dedicated courier drop-off points are located near the administrative block for convenient mailing services."
+        },
+        {
+            "question": "What open-air amphitheater facilities exist for cultural performances?",
+            "answer": "An expansive open-air amphitheater is located near the central plaza, hosting student dramatics, musical evenings, and open-mic club events."
+        }
+    ],
+    "food": [
+        {
+            "question": "What food and canteen spots are available on campus?",
+            "answer": "Campus food spots include Canoe and Cuisine (famous for biryanis), Tea Leaf (hot beverages), Juice Corner, Temple Square, Central Square, Fresh Choice Bakery, and the Milk Parlour."
+        },
+        {
+            "question": "What are the operational hours of campus canteens and food courts?",
+            "answer": "Campus canteens operate from 8:00 AM to 8:30 PM, offering a variety of breakfast snacks, meals, and beverages throughout the day."
+        },
+        {
+            "question": "Are hygienic standards maintained across all food and beverage outlets?",
+            "answer": "Regular inspections are conducted by the campus administration to ensure strict hygiene, food quality, and clean drinking water availability in all canteens."
+        },
+        {
+            "question": "Can birthday cakes and bakery items be ordered on campus?",
+            "answer": "Yes, Fresh Choice Bakery inside the campus accepts custom orders for birthday cakes, pastries, and celebratory snacks."
+        },
+        {
+            "question": "Are vegetarian and non-vegetarian food options available separately?",
+            "answer": "Both vegetarian and non-vegetarian food options are prepared and served across specialized counters in the main food courts and mess halls."
+        },
+        {
+            "question": "Is dairy fresh milk available for students on campus?",
+            "answer": "The campus Milk Parlour supplies fresh milk, curd, buttermilk, and dairy products daily for students and staff."
+        },
+        {
+            "question": "Are packaged snacks and cold beverages readily available during class breaks?",
+            "answer": "Multiple vending kiosks and snack counters located near academic blocks offer packaged snacks, biscuits, and cold drinks."
+        },
+        {
+            "question": "How are food-related complaints or suggestions addressed?",
+            "answer": "Students can submit feedback or suggestions directly to the mess committee or via the student grievance portal for immediate action."
+        },
+        {
+            "question": "Are eating arrangements available outdoors around the food spots?",
+            "answer": "Shaded outdoor seating arrangements and open-air dining tables are set up around Central Square and Tea Leaf for relaxing meals."
+        },
+        {
+            "question": "Do canteens accept digital UPI payments?",
+            "answer": "Yes, all campus canteens, bakeries, and juice stalls accept digital payments via UPI apps alongside cash."
+        },
+        {
+            "question": "What breakfast items are typically served in the hostel messes?",
+            "answer": "Hostel mess breakfast menus rotate daily to feature South Indian staples like idli, dosa, vada, upma, pongal, and bread-butter-jam with tea or coffee."
+        },
+        {
+            "question": "Are special dietary meals provided for students with medical conditions?",
+            "answer": "The mess management prepares specialized bland or low-oil dietary meals upon submission of a certified doctor's prescription."
+        },
+        {
+            "question": "What drinking water purification systems are installed across canteens?",
+            "answer": "Multi-stage RO (Reverse Osmosis) and UV-filtered water purification coolers are installed across all dining halls and academic buildings."
+        },
+        {
+            "question": "Are food outlet prices regulated by the college administration?",
+            "answer": "All food pricing across campus canteens and messes is monitored and regulated by an institutional committee to maintain affordable rates for students."
+        },
+        {
+            "question": "Can students organize private food parties or events on campus?",
+            "answer": "Small student get-togethers or department parties can be organized at designated lawn spaces or canteens with prior administrative approval."
+        },
+        {
+            "question": "Are fruit salad and fresh juice options available during afternoon hours?",
+            "answer": "The campus Juice Corner serves freshly blended seasonal fruit juices, milkshakes, and chopped fruit salads throughout the day."
+        },
+        {
+            "question": "What fast food items are offered at Temple Square and Central Square snack outlets?",
+            "answer": "Snack bars offer popular quick bites including puffs, sandwiches, noodles, fried rice, and South Indian tiffins during break hours."
+        },
+        {
+            "question": "Are periodic food safety audits conducted by external health inspectors?",
+            "answer": "Yes, campus food preparation areas undergo unannounced health and safety inspections by institutional hygiene committees to ensure top-grade sanitation."
+        },
+        {
+            "question": "What disposal systems are used for food waste in dining areas?",
+            "answer": "Food waste is collected systematically and routed toward campus organic composting units and biogas generation systems."
+        },
+        {
+            "question": "Are hot beverage vending machines installed inside academic building blocks?",
+            "answer": "Automated tea and coffee vending machines are accessible near departmental staff rooms and student reading lounges."
+        }
+    ],
+    "clubs": [
+        {
+            "question": "What technical chapters and clubs operate on campus?",
+            "answer": "Active technical chapters include E-Cell (Entrepreneurship Cell), GDG (Google Developer Groups), and the Student Success Center."
+        },
+        {
+            "question": "What cultural and hobby clubs can students join?",
+            "answer": "Students can join various hobby chapters including the Dance Club, Music Club, Drone Club, and Robotics Club."
+        },
+        {
+            "question": "Who are the primary student coordinators for campus clubs?",
+            "answer": "Coordinators include Rahul Sharma (E-Cell), Priya Varma (GDG), Amit Kumar (Student Success Center), Neha Reddy (Dance Club), Rohit Verma (Music Club), Karthik Nair (Drone Club), and Sneha Rao (Robotics Club)."
+        },
+        {
+            "question": "How can a student register to join a college club?",
+            "answer": "Students can express interest during annual club recruitment drives or contact the respective faculty advisors and student coordinators directly."
+        },
+        {
+            "question": "Are technical hackathons and coding competitions conducted regularly?",
+            "answer": "Yes, clubs regularly organize coding hackathons, ideathons, technical quizzes, and model exhibitions to foster practical innovation."
+        },
+        {
+            "question": "What events do cultural clubs organize during college fests?",
+            "answer": "Cultural clubs organize annual fest competitions including classical and western dance battles, singing recitals, battle of the bands, and dramatic plays."
+        },
+        {
+            "question": "How do technical clubs assist students with startup ideas?",
+            "answer": "E-Cell provides incubation support, mentorship, pitching sessions, and guidance for student entrepreneurs looking to launch startups."
+        },
+        {
+            "question": "Can first-year students participate in club activities?",
+            "answer": "Yes, first-year students are encouraged to join clubs during introductory recruitment drives to build teamwork and leadership skills."
+        },
+        {
+            "question": "Where can students find notices regarding upcoming club meetings?",
+            "answer": "Notices for club meetups, workshops, and auditions are posted on official student portals, social media channels, and department notice boards."
+        },
+        {
+            "question": "Are certificates provided for active participation in college clubs?",
+            "answer": "Yes, participation certificates and merit awards are distributed during annual day functions to active members and event winners."
+        },
+        {
+            "question": "What literary and debate clubs operate to improve communication skills?",
+            "answer": "Literary wings like English Empyrean, Ad Lib (speaking club), and Lexicozion (vocabulary club) organize regular elocution, debate, and creative writing contests."
+        },
+        {
+            "question": "How do student chapters collaborate with external industry bodies?",
+            "answer": "Technical chapters frequently collaborate with professional bodies like IEEE, CSI, and ACM to host guest lectures by corporate engineers."
+        },
+        {
+            "question": "Are there photography or media clubs active on campus?",
+            "answer": "Yes, campus media cells and photography clubs document all major cultural fests, sports events, and technical symposia."
+        },
+        {
+            "question": "What role does VEDIC play in student development workshops?",
+            "answer": "Vishnu Educational Development and Innovation Centre (VEDIC) conducts specialized faculty and student training programs focused on leadership, design thinking, and engineering skills."
+        },
+        {
+            "question": "How are annual club budgets and event funding approved?",
+            "answer": "Club event proposals and budget estimates are submitted to the student affairs deanery for review and financial sanction."
+        },
+        {
+            "question": "Are coding clubs involved in organizing collegiate ICPC or hackathon pre-qualifiers?",
+            "answer": "Yes, competitive programming wings host regular internal coding contests to prepare students for national hackathons and ICPC regionals."
+        },
+        {
+            "question": "What community service and social outreach clubs operate on campus?",
+            "answer": "NSS (National Service Scheme) and Rotaract clubs organize blood donation camps, rural literacy drives, and environmental cleanup campaigns."
+        },
+        {
+            "question": "Can students propose new clubs or special interest chapters during the academic year?",
+            "answer": "New student chapter proposals supported by a faculty advisor and a minimum roster of interested members can be submitted to the dean of student affairs for approval."
+        },
+        {
+            "question": "How are student club elections or leadership transitions managed?",
+            "answer": "Club leadership transitions occur annually through structured interviews and peer evaluations supervised by outgoing coordinators and faculty advisors."
+        },
+        {
+            "question": "Are inter-collegiate cultural fests hosted annually on campus?",
+            "answer": "Yes, the institution hosts grand annual inter-collegiate cultural and technical symposiums inviting participants from colleges across the state."
+        }
+    ],
+    "portals": [
+        {
+            "question": "What are the official college web portals and their uses?",
+            "answer": "• vishnu.ac.in: Attendance records, student profiles, fee details.\n• vishnu.ac.results: Semester examination results.\n• vishnulearning.com: Study materials, lecture PDFs, quizzes.\n• vedic.dev: Placement profiles, mock interviews, technical notices."
+        },
+        {
+            "question": "How do I access attendance records online?",
+            "answer": "Attendance records can be viewed securely by logging into your student account on the official portal at vishnu.ac.in."
+        },
+        {
+            "question": "Where can I view faculty announcements and circulars?",
+            "answer": "Official college announcements, circulars, and notifications are published regularly on vedic.dev and the main institutional website."
+        },
+        {
+            "question": "How do I submit online assignments on vishnulearning.com?",
+            "answer": "Log into vishnulearning.com using your assigned student credentials, navigate to your respective course page, and upload your assignment files before the deadline."
+        },
+        {
+            "question": "What should I do if my student portal login password?",
+            "answer": "You can use the password reset option in the chat helpdesk or visit the Cyber Zone IT helpdesk for manual password recovery assistance."
+        },
+        {
+            "question": "Are student portals accessible on mobile phones?",
+            "answer": "Yes, all institutional portals are responsive and can be accessed easily via mobile browsers or dedicated campus Android/iOS apps."
+        },
+        {
+            "question": "How often is student attendance data updated on the portal?",
+            "answer": "Faculty members update hourly or daily attendance logs, which reflect on the vishnu.ac.in student portal on a regular basis."
+        },
+        {
+            "question": "Can parents view their child's academic progress online?",
+            "answer": "Parents have dedicated login credentials to monitor attendance percentages, mid-term marks, and fee payment statuses through the parent portal."
+        },
+        {
+            "question": "Where can students download official bonafide or study certificates?",
+            "answer": "Bonafide certificate requests can be initiated via the student portal and collected from the academic section after processing."
+        },
+        {
+            "question": "Who provides technical assistance for portal navigation errors?",
+            "answer": "The campus IT support cell provides technical assistance for resolving browser errors, login loops, or portal navigation problems."
+        },
+        {
+            "question": "How secure are student portal databases against unauthorized access?",
+            "answer": "Portals utilize encrypted session tokens, multi-tier firewalls, and secure authentication protocols to protect user data privacy."
+        },
+        {
+            "question": "Can alumni access portal resources after graduation?",
+            "answer": "Alumni retain restricted access to placement portals, alumni networking directories, and transcript verification services."
+        },
+        {
+            "question": "What browser compatibility is recommended for accessing institutional portals?",
+            "answer": "Portals are optimized for modern web browsers including Google Chrome, Mozilla Firefox, Microsoft Edge, and Safari."
+        },
+        {
+            "question": "How are online fee transaction failures resolved?",
+            "answer": "Failed online transactions with debited amounts are automatically reconciled or refunded to the source account within 3 to 5 working days."
+        },
+        {
+            "question": "Where can students check their internal assessment marks online?",
+            "answer": "Mid-term examination and continuous assessment marks are published directly on the student profile dashboard at vishnu.ac.in."
+        },
+        {
+            "question": "Is there a dedicated mobile application for accessing campus portal features?",
+            "answer": "Yes, the Smart Campus mobile application aggregates portal features including attendance, fee dues, library records, and outing permissions into one interface."
+        },
+        {
+            "question": "How are student feedback surveys administered through web portals?",
+            "answer": "End-of-semester faculty appraisal and course feedback surveys are hosted securely through authenticated student portal modules."
+        },
+        {
+            "question": "What steps should be taken if student portal session tokens expire repeatedly?",
+            "answer": "Clearing browser cache cookies or switching to an incognito session typically resolves recurring token expiration issues on campus web portals."
+        },
+        {
+            "question": "Can course registration choices for electives be submitted online?",
+            "answer": "Yes, open electives and professional elective course selections are processed online during designated registration windows via vishnu.ac.in."
+        },
+        {
+            "question": "Where can students find academic calendar schedules online?",
+            "answer": "The comprehensive institutional academic calendar detailing working days, exam weeks, and festival holidays is downloadable directly from the primary college portal."
         }
     ],
     "eapcet": [
         {
             "question": "AP-EAMCET Cutoffs & Admissions",
             "answer": "🎓 **VISHNU INSTITUTE OF TECHNOLOGY :: BHIMAVARAM**\n📊 **EAPCET - 2025 (1st Phase) Last Ranks Admitted:**\n\n**CSE**\n[OC] MALE : 4433 || FEMALE : 5213\n[EWS] MALE : 5032 || FEMALE : 5744\n[BC_A] MALE : 8905 || FEMALE : 12366\n[BC_B] MALE : 7269 || FEMALE : 10315\n[BC_C] MALE : -- || FEMALE : 28955\n[BC_D] MALE : 5976 || FEMALE : 6601\n[BC_E] MALE : 21625 || FEMALE : 14687\n[SC] MALE : 128632 || FEMALE : 30515\n[ST] MALE : 74436 || FEMALE : 79778\n\n**IT**\n[OC] MALE : 13178 || FEMALE : 12907\n[EWS] MALE : 14633 || FEMALE : 14652\n[BC_A] MALE : 26915 || FEMALE : 29842\n[BC_B] MALE : 20611 || FEMALE : 20938\n[BC_C] MALE : 47210 || FEMALE : --\n[BC_D] MALE : 20065 || FEMALE : 19761\n[BC_E] MALE : 37859 || FEMALE : 33808\n[SC] MALE : 116010 || FEMALE : 127581\n[ST] MALE : 155318 || FEMALE : 146405\n\n**AI & DS**\n[OC] MALE : 6625 || FEMALE : 7399\n[EWS] MALE : 7191 || FEMALE : 7688\n[BC_A] MALE : 12672 || FEMALE : 19598\n[BC_B] MALE : 12281 || FEMALE : 12442\n[BC_C] MALE : 78325 || FEMALE : --\n[BC_D] MALE : 8925 || FEMALE : 10790\n[BC_E] MALE : 18699 || FEMALE : 26815\n[SC] MALE : 37990 || FEMALE : 64207\n[ST] MALE : 102357 || FEMALE : 113609\n\n**AI & ML**\n[OC] MALE : 4811 || FEMALE : 6105\n[EWS] MALE : 5377 || FEMALE : 6346\n[BC_A] MALE : 10725 || FEMALE : 11919\n[BC_B] MALE : 8565 || FEMALE : 9478\n[BC_C] MALE : -- || FEMALE : --\n[BC_D] MALE : 6907 || FEMALE : 8534\n[BC_E] MALE : 11199 || FEMALE : 28862\n[SC] MALE : 162962 || FEMALE : 33487\n[ST] MALE : 80396 || FEMALE : 90802\n\n**ECE**\n[OC] MALE : 8364 || FEMALE : 12064\n[EWS] MALE : 11746 || FEMALE : 12604\n[BC_A] MALE : 16549 || FEMALE : 24481\n[BC_B] MALE : 16418 || FEMALE : 17163\n[BC_C] MALE : 22974 || FEMALE : --\n[BC_D] MALE : 10762 || FEMALE : 15290\n[BC_E] MALE : 43923 || FEMALE : 50516\n[SC] MALE : 46800 || FEMALE : 65593\n[ST] MALE : 93073 || FEMALE : 105938\n\n📋 **Required Admission Documents:**\n1. EAMCET/EAPCET Rank Card & Hall Ticket\n2. Study Certificates (6th to 10+2)\n3. Transfer Certificate (TC)\n4. Income & Caste Certificates\n\n📍 **Admission Venue:** Ground floor of the main administrative block."
+        },
+        {
+            "question": "What are the eligibility criteria for lateral entry admissions into B.Tech?",
+            "answer": "Diploma holders or B.Sc graduates can seek lateral entry admission into the second year of B.Tech through the AP ECET counseling process based on state rank standings."
+        },
+        {
+            "question": "Are management quota admissions handled directly on campus?",
+            "answer": "Yes, management category admissions follow state government guidelines and are processed through the admissions office located in the administrative block."
+        },
+        {
+            "question": "What is the fee reimbursement structure for eligible EAPCET counseling candidates?",
+            "answer": "Eligible candidates qualifying through AP EAPCET counseling receive tuition fee reimbursement sanctioned by the state government as per category welfare norms."
+        },
+        {
+            "question": "Are spot admissions conducted for vacant seats after concluding counseling phases?",
+            "answer": "Spot admissions for any leftover vacancies following regular EAPCET counseling phases are conducted transparently on campus according to state guidelines."
         }
     ]
 }
