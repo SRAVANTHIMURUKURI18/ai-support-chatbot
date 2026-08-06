@@ -117,16 +117,19 @@ Before implementation, three approaches were studied.
 
 ## Selected Approach
 
-The **Rule-Based Approach** was selected because the College Helpdesk domain contains predefined services and structured workflows.
+The **Hybrid Approach** was selected because the College Helpdesk consists of both **structured student service workflows** and **knowledge-based information retrieval**.
 
 Examples include:
 
+- Login and Registration
 - Password Reset
-- Ticket Creation
-- Ticket Listing
-- FAQ Retrieval
+- Ticket Creation and Ticket Listing
+- Chat History and Announcements
+- College Handbook Queries (Hostel Rules, Bus Timings, Fee Information, Attendance, etc.)
 
-Since these tasks are deterministic, rule-based intent detection provides faster execution without requiring expensive LLM classification.
+Structured workflows are handled using **rule-based intent detection and state management**, ensuring fast and predictable execution. Knowledge-based queries are handled through **semantic retrieval using FAISS and HuggingFace embeddings**, which retrieves the most relevant information from the college handbook. Dynamic student-related operations such as ticket management, profiles, and chat history are performed using **SQLite and SQLAlchemy**.
+
+This hybrid design combines the speed and reliability of rule-based routing with the flexibility of semantic search, while avoiding the latency and cost of external LLM APIs.
 
 ---
 
