@@ -289,8 +289,8 @@ To evaluate the chatbot using the provided test scenarios:
 python test_eval.py
 ```
 
-This executes the evaluation dataset and reports metrics such as intent detection accuracy and response success rate.
----
+**This executes the evaluation dataset and reports metrics such as intent detection accuracy and response success rate.
+**---
 
 # 📊 Evaluation
 
