@@ -281,7 +281,15 @@ frontend/signup.html
 ```
 
 Alternatively, launch the frontend using the **VS Code Live Server** extension.
+## Run the Evaluation Script (Optional)
 
+To evaluate the chatbot using the provided test scenarios:
+
+```bash
+python test_eval.py
+```
+
+This executes the evaluation dataset and reports metrics such as intent detection accuracy and response success rate.
 ---
 
 # 📊 Evaluation
