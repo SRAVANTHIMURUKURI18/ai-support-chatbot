@@ -136,30 +136,38 @@ This hybrid design combines the speed and reliability of rule-based routing with
 # 📂 Repository Structure
 
 ```
-VIThelpdesk/
+ai-support-chatbot/
 │
 ├── backend/
+│   ├── venv/
 │   ├── chatbot.py
+│   ├── database.py
+│   ├── faq_data.txt
+│   ├── faq_dataset.json
+│   ├── faq_knowledge.py
+│   ├── helpdesk.db
 │   ├── main.py
+│   ├── models.py
 │   ├── rag_engine.py
-│   ├── build_index.py
-│   ├── knowledge.json
-│   ├── users.db
-│   └── requirements.txt
-│
-├── frontend/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
+│   ├── requirements.txt
+│   ├── seed_announcement.py
+│   └── tools.py
 │
 ├── dataset/
 │   └── test_cases.json
 │
-├── evaluation.py
-├── evaluation_results.png
-├── report.pdf
+├── frontend/
+│   ├── app.js
+│   ├── chat.html
+│   ├── index.html
+│   ├── profile.html
+│   ├── signup.html
+│   └── styles.css
+├── helpdesk.db
 ├── README.md
-└── .gitignore
+├── REPORT (1).pdf
+├── REPORT.md
+└── test_eval.py
 ```
 
 ---
@@ -189,7 +197,6 @@ VIThelpdesk/
 - SQLite
 
 ---
-
 # 🚀 Installation
 
 ## Clone Repository
@@ -203,14 +210,14 @@ cd VIThelpdesk
 
 ## Create Virtual Environment
 
-Windows
+### Windows
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-Linux / macOS
+### Linux / macOS
 
 ```bash
 python3 -m venv venv
@@ -227,21 +234,25 @@ pip install -r backend/requirements.txt
 
 ---
 
-## Build the FAISS Index
+## Initialize Database / Seed Announcements (Optional)
+
+If you want to populate the application with the sample announcement used in the project, run:
 
 ```bash
-python backend/build_index.py
+python backend/seed_announcement.py
 ```
+
+> *This step is optional and only required if you want the default announcement to appear in the chatbot.*
 
 ---
 
-## Start Backend
+## Start the Backend Server
 
 ```bash
 uvicorn backend.main:app --reload
 ```
 
-Backend URL
+Backend URL:
 
 ```
 http://127.0.0.1:8000
@@ -249,15 +260,27 @@ http://127.0.0.1:8000
 
 ---
 
-## Run Frontend
+## Run the Frontend
 
-Open
+Open any of the frontend pages in your browser, for example:
 
 ```
 frontend/index.html
 ```
 
-or launch it using the VS Code Live Server extension.
+or
+
+```
+frontend/chat.html
+```
+
+or
+
+```
+frontend/signup.html
+```
+
+Alternatively, launch the frontend using the **VS Code Live Server** extension.
 
 ---
 
