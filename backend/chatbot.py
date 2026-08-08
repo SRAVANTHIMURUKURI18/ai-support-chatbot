@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal
 from backend.models import Student, Ticket
@@ -117,7 +118,57 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "How can I assist you today? You can ask me any question directly, or type **'menu'** if you want to view the main options."
             )
 
-        # 1. Handle Active Submenu States FIRST (Displays a concise 3-item overview)
+        # 🚨 PRIORITY 1: TICKET CLOSING / RESOLUTION REQUEST
+        if any(term in msg_lower for term in ["close ticket", "resolve ticket", "ticket #", "mark resolved"]):
+            user_states[clean_email] = "main_menu"
+            if not student:
+                return f"⚠️ Student profile not found for `{clean_email}`. Please re-login.\n\nType **'menu'** to return."
+            
+            ticket_nums = re.findall(r'\d+', message)
+            if ticket_nums:
+                target_id = int(ticket_nums[0])
+                ticket_obj = db.query(Ticket).filter(Ticket.id == target_id, Ticket.student_id == student.id).first()
+                if ticket_obj:
+                    ticket_obj.status = "Resolved"
+                    db.commit()
+                    return f"✅ **Ticket #{target_id} has been marked as Resolved successfully!**\n\nType **'menu'** to return to main options."
+                else:
+                    return f"❌ **Error:** Could not find an active ticket with ID #{target_id} under your profile.\n\nType **'menu'** to return."
+            else:
+                return "⚠️ Please specify the ticket number you wish to close (e.g., *'close ticket #12'*).\n\nType **'menu'** to return."
+
+        # 🚨 PRIORITY 2: AUTOMATED TICKET INTERCEPTOR FOR ACTUAL SYSTEM/INFRASTRUCTURE FAILURES
+        is_informational_query = any(phrase in msg_lower for phrase in ["can i", "how", "what are", "rules", "request", "is there", "check", "timings", "timing", "where"])
+        
+        issue_keywords = ["wifi", "internet", "network", "router", "connection", "transaction failed", "payment failed", "portal crashed", "bug", "error in portal"]
+        if any(kw in msg_lower for kw in issue_keywords) and not is_informational_query and current_state == "main_menu":
+            category = "IT Support"
+            if any(term in msg_lower for term in ["result", "marks", "exam", "grade"]):
+                category = "Academic"
+            elif any(term in msg_lower for term in ["hostel", "room", "mess"]):
+                category = "Hostel"
+            elif any(term in msg_lower for term in ["fee", "payment", "transaction"]):
+                category = "Fee"
+
+            user_states[clean_email] = "main_menu"
+            if student:
+                new_ticket = Ticket(
+                    student_id=student.id,
+                    category=category,
+                    description=message,
+                    status="Open"
+                )
+                db.add(new_ticket)
+                db.commit()
+                return (
+                    f"✅ **Support Ticket Created & Saved to Database Automatically!**\n\n"
+                    f"• **Category:** {category}\n"
+                    f"• **Description:** {message}\n"
+                    f"• **Status:** Open\n\n"
+                    "Type **'menu'** to return to main options."
+                )
+
+        # 1. Handle Active Submenu States FIRST
         if current_state == "rag_submenu":
             user_states[clean_email] = "main_menu"
             
@@ -264,7 +315,7 @@ def process_chat_message(message: str, session_id: str) -> str:
 
         # College Info Match
         if msg_lower == "2" or "college info" in msg_lower or "📚" in message:
-            user_states[clean_email] = "rag_submenu"
+            user_states[clean_email] = "main_menu"
             return (
                 "📚 **College Information Submenu**\n"
                 "Select a topic below:\n\n"
@@ -284,7 +335,63 @@ def process_chat_message(message: str, session_id: str) -> str:
             user_states[clean_email] = "reset_pwd_old"
             return "🔐 **Portal Password Reset**\nPlease enter your **current password**:"
 
-        # Specific Club Inquiry Match (Prioritized over general club match)
+        # Direct Mess Timings Override
+        if any(term in msg_lower for term in ["mess timing", "mess timings", "food timing", "breakfast time", "lunch time", "dinner time", "hostel mess"]):
+            user_states[clean_email] = "main_menu"
+            return (
+                "🍽️ **Hostel Mess Timings & Details:**\n"
+                "• **Breakfast:** 7:30 AM – 9:30 AM\n"
+                "• **Lunch:** 12:00 PM – 2:00 PM\n"
+                "• **Snacks:** 4:30 PM – 5:30 PM\n"
+                "• **Dinner:** 7:30 PM – 9:30 PM\n\n"
+                "Type **'menu'** to return to main options."
+            )
+
+        # Direct Gym / Fitness Location Override
+        if any(term in msg_lower for term in ["gym", "fitness", "workout", "where is gym"]):
+            user_states[clean_email] = "main_menu"
+            return (
+                "🏢 **Gym Location:**\n"
+                "The fully equipped modern gym and fitness center is located near the **Cyber Zone**.\n\n"
+                "Type **'menu'** to return to main options."
+            )
+
+        # Direct FAQ Category Overrides returning clean answers without headers
+        if any(term in msg_lower for term in ["hall ticket", "duplicate hall ticket", "exam branch", "revaluation"]):
+            user_states[clean_email] = "main_menu"
+            exam_data = FAQ_DATA.get("examination", [{}])[0]
+            answer_text = exam_data.get('answer', '')
+            return f"{answer_text}\n\nType **'menu'** to return to main options."
+
+        if any(term in msg_lower for term in ["room change", "hostel room", "warden", "room allocation"]):
+            user_states[clean_email] = "main_menu"
+            hostel_data = FAQ_DATA.get("hostel", [{}])[0]
+            answer_text = hostel_data.get('answer', '')
+            return f"{answer_text}\n\nType **'menu'** to return to main options."
+
+        if any(term in msg_lower for term in ["check results", "check my results", "how to check results", "exam results"]):
+            user_states[clean_email] = "main_menu"
+            exam_data = FAQ_DATA.get("examination", [{}])
+            target_answer = "Semester examination results can be officially checked through the dedicated results portal at vishnu.ac.results."
+            for item in exam_data:
+                if "results" in item.get("question", "").lower():
+                    target_answer = item.get("answer")
+                    break
+            return f"{target_answer}\n\nType **'menu'** to return to main options."
+
+        # Specific Check for EAMCET / Admission Documents
+        if any(term in msg_lower for term in ["document", "docs", "certificates", "required docs", "admission documents"]):
+            user_states[clean_email] = "main_menu"
+            return (
+                "📋 **Required Admission Documents for EAMCET/EAPCET:**\n"
+                "1. EAMCET/EAPCET Rank Card & Hall Ticket\n"
+                "2. Study Certificates (6th to 10+2)\n"
+                "3. Transfer Certificate (TC)\n"
+                "4. Income & Caste Certificates\n\n"
+                "Type **'menu'** to return to main options."
+            )
+
+        # Specific Club Inquiry Match
         if any(w in msg_lower for w in ["music club", "dance club", "drone club", "robotics club", "e-cell", "gdg", "student success center"]):
             user_states[clean_email] = "main_menu"
             if "music" in msg_lower:
@@ -421,8 +528,8 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "Type **'menu'** to return to main options."
             )
 
-        # Examination Results Match
-        if any(w in msg_lower for w in ["result", "results", "marks", "grades", "exam", "exams"]):
+        # Examination Results Portal Link Match
+        if any(w in msg_lower for w in ["result link", "results link", "exam link"]):
             user_states[clean_email] = "main_menu"
             return (
                 "🌐 **Semester Examination Results Portal:**\n"
@@ -431,29 +538,20 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "Type **'menu'** to return to main options."
             )
 
-        # Gym / Fitness Match
-        if any(w in msg_lower for w in ["gym", "sports", "fitness", "workout", "playground", "ground", "pool"]):
-            user_states[clean_email] = "main_menu"
-            return (
-                "🏢 **Campus Facilities & Fitness Spots:**\n"
-                "• **Gym & Cyber Zone**: Fully equipped modern gym and fitness center located near the Cyber Zone.\n"
-                "• **Sports Grounds**: Full-size cricket ground, football field, tennis courts, squash court, and swimming pool.\n\n"
-                "Type **'menu'** to return to main options."
-            )
-
         if "eapcet" in msg_lower or "eamcet" in msg_lower or "admission" in msg_lower:
             user_states[clean_email] = "main_menu"
             eapcet_data = FAQ_DATA.get("eapcet", [{}])[0]
             return f"{eapcet_data.get('answer', '')}\n\nType **'menu'** to return to main options."
 
-        # Smart JSON FAQ Dataset Scanner (Scans your entire 4,000+ line FAQ dataset for keyword matches)
+        # Smart JSON FAQ Dataset Scanner (Returns clean answer text without headers)
         for category, qa_list in FAQ_DATA.items():
             for item in qa_list:
                 q_text = item.get("question", "").lower()
                 keywords = [word for word in msg_lower.split() if len(word) > 3]
                 if any(kw in q_text for kw in keywords) or msg_lower in q_text:
                     user_states[clean_email] = "main_menu"
-                    return f"📖 **Information from Knowledge Base ({category.upper()}):**\n\n• **Q:** {item['question']}\n  **A:** {item['answer']}\n\nType **'menu'** to return to main options."
+                    answer_text = item.get('answer', '')
+                    return f"{answer_text}\n\nType **'menu'** to return to main options."
 
         # 3. Fallback to LangChain PDF RAG Engine for Any General Question
         context = query_rag(message)
@@ -462,7 +560,7 @@ def process_chat_message(message: str, session_id: str) -> str:
             cleaned_text = context.replace("", "").strip()
             paragraphs = [p.replace("\n", " ").strip() for p in cleaned_text.split("\n\n") if p.strip()]
             formatted_body = "\n\n".join(paragraphs)
-            return f"📄 **Official College Handbook & Guidelines (RAG):**\n\n{formatted_body}\n\nType **'menu'** to return to main options."
+            return f"{formatted_body}\n\nType **'menu'** to return to main options."
 
         # 4. Final Fallback if nothing matches
         user_states[clean_email] = "main_menu"
