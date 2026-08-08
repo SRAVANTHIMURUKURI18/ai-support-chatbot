@@ -97,6 +97,105 @@ def process_chat_message(message: str, session_id: str) -> str:
         current_state = user_states.get(clean_email, "main_menu")
         student = db.query(Student).filter(Student.email == clean_email).first()
 
+        # ==========================================
+        # 🚨 PRIORITY 0: HANDLE STRICT MULTI-STEP STATES FIRST
+        # This prevents passwords or ticket descriptions from triggering random keywords like "hi"
+        # ==========================================
+        if current_state == "reset_pwd_old":
+            user_states[clean_email + "_old_pwd"] = message
+            user_states[clean_email] = "reset_pwd_new"
+            return "🔐 Please enter your **new password**:"
+
+        if current_state == "reset_pwd_new":
+            old_pwd = user_states.pop(clean_email + "_old_pwd", "")
+            new_pwd = message
+            user_states[clean_email] = "main_menu"
+
+            if not student:
+                return f"⚠️ Student profile not found for `{clean_email}`.\n\nType **'menu'** to return."
+            
+            if student.password != old_pwd:
+                return "❌ **Password Reset Failed:** Your current password is incorrect.\n\nType **'menu'** to return."
+
+            student.password = new_pwd
+            db.commit()
+            return "✅ **Password Updated Successfully!** Your portal password has been changed in the database.\n\nType **'menu'** to return to main options."
+
+        if current_state == "creating_ticket_category":
+            user_states[clean_email] = "creating_ticket_desc"
+            cat_map = {
+                "1": "Academic", "2": "Hostel", "3": "Library", "4": "Placement",
+                "5": "Fee", "6": "IT Support", "7": "Examination", "8": "Administration"
+            }
+            selected_cat = cat_map.get(msg_lower, message.title())
+            user_states[clean_email + "_category"] = selected_cat
+            return f"📝 Category selected: **{selected_cat}**.\nPlease provide a comprehensive description of your issue:"
+
+        if current_state == "creating_ticket_desc":
+            category = user_states.pop(clean_email + "_category", "General")
+            user_states[clean_email] = "main_menu"
+
+            if student:
+                new_ticket = Ticket(
+                    student_id=student.id,
+                    category=category,
+                    description=message,
+                    status="Open"
+                )
+                db.add(new_ticket)
+                db.commit()
+                return f"✅ **Support Ticket Created & Saved to Database!**\n\n• **Category:** {category}\n• **Description:** {message}\n• **Status:** Open\n\nType **'menu'** to return to main options."
+            else:
+                return f"⚠️ Error identifying student profile for `{clean_email}`. Please re-login.\n\nType **'menu'** to return."
+
+        if current_state == "rag_submenu":
+            user_states[clean_email] = "main_menu"
+            
+            mapping = {
+                "1": "academics", "academic": "academics",
+                "2": "hostel", "hostel": "hostel",
+                "mess": "mess", "3": "placements", "placement": "placements",
+                "4": "library", "library": "library",
+                "5": "examination", "exam": "examination",
+                "6": "fee", "fee": "fee",
+                "7": "it_support", "it": "it_support",
+                "8": "eapcet", "eamcet": "eapcet", "admission": "eapcet"
+            }
+            
+            key = mapping.get(msg_lower, "academics")
+            category_data = FAQ_DATA.get(key, [])
+            
+            if key == "eapcet":
+                ans = category_data[0]["answer"] if category_data else ""
+                return f"{ans}\n\nType **'menu'** to return to main options."
+
+            res_str = f"📖 **Quick Overview regarding {key.upper()}:**\n\n"
+            for item in category_data[:3]:
+                res_str += f"• **{item['question']}**\n  {item['answer']}\n\n"
+            res_str += "Type **'menu'** to return to main options or ask a specific question!"
+            return res_str
+            
+        if current_state == "club_interest":
+            user_states[clean_email] = "main_menu"
+            if "yes" in msg_lower or "y" in msg_lower:
+                return (
+                    "🎉 **Great! Here are the official contact details and coordinators for all campus clubs:**\n\n"
+                    "• **E-Cell (Entrepreneurship Cell):** Coordinator - Rahul Sharma (Ph: +91 98765 43210)\n"
+                    "• **GDG (Google Developer Groups):** Coordinator - Priya Varma (Ph: +91 91234 56789)\n"
+                    "• **Student Success Center:** Coordinator - Amit Kumar (Ph: +91 99887 76655)\n"
+                    "• **Dance Club:** Coordinator - Neha Reddy (Ph: +91 94433 22110)\n"
+                    "• **Music Club:** Coordinator - Rohit Verma (Ph: +91 95544 33221)\n"
+                    "• **Drone Club:** Coordinator - Karthik Nair (Ph: +91 96655 44332)\n"
+                    "• **Robotics Club:** Coordinator - Sneha Rao (Ph: +91 97766 55443)\n\n"
+                    "Type **'menu'** to return to main options."
+                )
+            else:
+                return "No worries! Type **'menu'** to return to main options."
+
+        # ==========================================
+        # GENERAL KEYWORD MATCHING (Runs ONLY if state is main_menu)
+        # ==========================================
+
         # Handle gratitude / thank you inputs politely
         if any(word in msg_lower for word in ["thank", "thanks", "thank you", "thx"]):
             user_states[clean_email] = "main_menu"
@@ -109,16 +208,18 @@ def process_chat_message(message: str, session_id: str) -> str:
                 return "Goodbye! Have a great day ahead. Type **'menu'** whenever you need assistance again."
             return "Got it! Type **'menu'** whenever you want to return to the main options."
 
-        # 0. Handle Page Load Initialization Flag & Casual User Greetings cleanly without menu dump
+        # Handle Page Load Initialization Flag & Casual User Greetings cleanly without menu dump
         if msg_lower == "__init_greeting__" or any(w in msg_lower for w in ["hi", "hello", "hey", "start", "greetings", "good morning", "good afternoon", "good evening", "morning", "evening"]):
-            user_states[clean_email] = "main_menu"
-            name_to_display = student.name if student else "Student"
-            return (
-                f"Hello {name_to_display}! 👋 Welcome to the Vishnu Institute of Technology IT Helpdesk.\n\n"
-                "How can I assist you today? You can ask me any question directly, or type **'menu'** if you want to view the main options."
-            )
+            # Prevent "hi" trigger if user typed a long question that just happens to contain "hi"
+            if len(msg_lower) < 20 or msg_lower == "__init_greeting__":
+                user_states[clean_email] = "main_menu"
+                name_to_display = student.name if student else "Student"
+                return (
+                    f"Hello {name_to_display}! 👋 Welcome to the Vishnu Institute of Technology IT Helpdesk.\n\n"
+                    "How can I assist you today? You can ask me any question directly, or type **'menu'** if you want to view the main options."
+                )
 
-        # 🚨 PRIORITY 1: TICKET CLOSING / RESOLUTION REQUEST
+        # 🚨 TICKET CLOSING / RESOLUTION REQUEST
         if any(term in msg_lower for term in ["close ticket", "resolve ticket", "ticket #", "mark resolved"]):
             user_states[clean_email] = "main_menu"
             if not student:
@@ -137,7 +238,7 @@ def process_chat_message(message: str, session_id: str) -> str:
             else:
                 return "⚠️ Please specify the ticket number you wish to close (e.g., *'close ticket #12'*).\n\nType **'menu'** to return."
 
-        # 🚨 PRIORITY 2: AUTOMATED TICKET INTERCEPTOR FOR ACTUAL SYSTEM/INFRASTRUCTURE FAILURES
+        # 🚨 AUTOMATED TICKET INTERCEPTOR FOR ACTUAL SYSTEM/INFRASTRUCTURE FAILURES
         is_informational_query = any(phrase in msg_lower for phrase in ["can i", "how", "what are", "rules", "request", "is there", "check", "timings", "timing", "where"])
         
         issue_keywords = ["wifi", "internet", "network", "router", "connection", "transaction failed", "payment failed", "portal crashed", "bug", "error in portal"]
@@ -168,99 +269,7 @@ def process_chat_message(message: str, session_id: str) -> str:
                     "Type **'menu'** to return to main options."
                 )
 
-        # 1. Handle Active Submenu States FIRST
-        if current_state == "rag_submenu":
-            user_states[clean_email] = "main_menu"
-            
-            mapping = {
-                "1": "academics", "academic": "academics",
-                "2": "hostel", "hostel": "hostel",
-                "mess": "mess", "3": "placements", "placement": "placements",
-                "4": "library", "library": "library",
-                "5": "examination", "exam": "examination",
-                "6": "fee", "fee": "fee",
-                "7": "it_support", "it": "it_support",
-                "8": "eapcet", "eamcet": "eapcet", "admission": "eapcet"
-            }
-            
-            key = mapping.get(msg_lower, "academics")
-            category_data = FAQ_DATA.get(key, [])
-            
-            if key == "eapcet":
-                ans = category_data[0]["answer"] if category_data else ""
-                return f"{ans}\n\nType **'menu'** to return to main options."
-
-            res_str = f"📖 **Quick Overview regarding {key.upper()}:**\n\n"
-            for item in category_data[:3]:
-                res_str += f"• **{item['question']}**\n  {item['answer']}\n\n"
-            res_str += "Type **'menu'** to return to main options or ask a specific question!"
-            return res_str
-
-        elif current_state == "creating_ticket_category":
-            user_states[clean_email] = "creating_ticket_desc"
-            cat_map = {
-                "1": "Academic", "2": "Hostel", "3": "Library", "4": "Placement",
-                "5": "Fee", "6": "IT Support", "7": "Examination", "8": "Administration"
-            }
-            selected_cat = cat_map.get(msg_lower, message.title())
-            user_states[clean_email + "_category"] = selected_cat
-            return f"📝 Category selected: **{selected_cat}**.\nPlease provide a comprehensive description of your issue:"
-
-        elif current_state == "creating_ticket_desc":
-            category = user_states.pop(clean_email + "_category", "General")
-            user_states[clean_email] = "main_menu"
-
-            if student:
-                new_ticket = Ticket(
-                    student_id=student.id,
-                    category=category,
-                    description=message,
-                    status="Open"
-                )
-                db.add(new_ticket)
-                db.commit()
-                return f"✅ **Support Ticket Created & Saved to Database!**\n\n• **Category:** {category}\n• **Description:** {message}\n• **Status:** Open\n\nType **'menu'** to return to main options."
-            else:
-                return f"⚠️ Error identifying student profile for `{clean_email}`. Please re-login.\n\nType **'menu'** to return."
-
-        elif current_state == "reset_pwd_old":
-            user_states[clean_email + "_old_pwd"] = message
-            user_states[clean_email] = "reset_pwd_new"
-            return "🔐 Please enter your **new password**:"
-
-        elif current_state == "reset_pwd_new":
-            old_pwd = user_states.pop(clean_email + "_old_pwd", "")
-            new_pwd = message
-            user_states[clean_email] = "main_menu"
-
-            if not student:
-                return f"⚠️ Student profile not found for `{clean_email}`.\n\nType **'menu'** to return."
-            
-            if student.password != old_pwd:
-                return "❌ **Password Reset Failed:** Your current password is incorrect.\n\nType **'menu'** to return."
-
-            student.password = new_pwd
-            db.commit()
-            return "✅ **Password Updated Successfully!** Your portal password has been changed in the database.\n\nType **'menu'** to return to main options."
-
-        elif current_state == "club_interest":
-            user_states[clean_email] = "main_menu"
-            if "yes" in msg_lower or "y" in msg_lower:
-                return (
-                    "🎉 **Great! Here are the official contact details and coordinators for all campus clubs:**\n\n"
-                    "• **E-Cell (Entrepreneurship Cell):** Coordinator - Rahul Sharma (Ph: +91 98765 43210)\n"
-                    "• **GDG (Google Developer Groups):** Coordinator - Priya Varma (Ph: +91 91234 56789)\n"
-                    "• **Student Success Center:** Coordinator - Amit Kumar (Ph: +91 99887 76655)\n"
-                    "• **Dance Club:** Coordinator - Neha Reddy (Ph: +91 94433 22110)\n"
-                    "• **Music Club:** Coordinator - Rohit Verma (Ph: +91 95544 33221)\n"
-                    "• **Drone Club:** Coordinator - Karthik Nair (Ph: +91 96655 44332)\n"
-                    "• **Robotics Club:** Coordinator - Sneha Rao (Ph: +91 97766 55443)\n\n"
-                    "Type **'menu'** to return to main options."
-                )
-            else:
-                return "No worries! Type **'menu'** to return to main options."
-
-        # 2. Flexible Global Navigation & Button Matchers
+        # Flexible Global Navigation & Button Matchers
         if any(w in msg_lower for w in ["menu", "main menu"]) or "🏠" in message:
             user_states[clean_email] = "main_menu"
             return (
@@ -315,7 +324,7 @@ def process_chat_message(message: str, session_id: str) -> str:
 
         # College Info Match
         if msg_lower == "2" or "college info" in msg_lower or "📚" in message:
-            user_states[clean_email] = "main_menu"
+            user_states[clean_email] = "rag_submenu"
             return (
                 "📚 **College Information Submenu**\n"
                 "Select a topic below:\n\n"
@@ -525,16 +534,6 @@ def process_chat_message(message: str, session_id: str) -> str:
                 "6. **Warden Approval**: Head Warden gives final authorization.\n"
                 "7. **Security Check-out**: Scan your pass at campus security to check out (parents receive a confirmation SMS/WhatsApp with date and time).\n"
                 "8. **Return**: The exact same security scan procedure is repeated upon re-entering the campus.\n\n"
-                "Type **'menu'** to return to main options."
-            )
-
-        # Examination Results Portal Link Match
-        if any(w in msg_lower for w in ["result link", "results link", "exam link"]):
-            user_states[clean_email] = "main_menu"
-            return (
-                "🌐 **Semester Examination Results Portal:**\n"
-                "You can check your semester examination results directly on the official portal:\n"
-                "• **Portal Link / Name**: `vishnu.ac.results`\n\n"
                 "Type **'menu'** to return to main options."
             )
 
